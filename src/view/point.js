@@ -5,7 +5,7 @@ const humanizedTimeInterval = (dateFrom, dateTo) =>{
   const hours = Math.floor(minutes/60);
   const days = Math.floor(hours/24);
 
-  return (days + 'D  ' + hours + 'H ' + (minutes %60) + 'M')
+  return (`${days  }D  ${  hours  }H ${  minutes %60  }M`)
     .replace('0D', '')
     .replace(' 0H', '')
     .replace(' 0M', '').trim();
@@ -23,7 +23,7 @@ const createOfferItem = (offer) => {
 
 const createOffersList = (offers) =>{
 
-  if (offers == null || offers.lenght == 0){
+  if (offers === null || offers.lenght === 0){
     return '';
   }
 
@@ -34,7 +34,7 @@ const createOffersList = (offers) =>{
 };
 
 export const createPointComponent = (point) => {
-  const {Name, EventType, Destination, ArrivalTime, DepartureTime, Cost, Offers} = point;
+  const {EventType, Destination, ArrivalTime, DepartureTime, Cost, Offers} = point;
 
   const arrDate = dayjs(ArrivalTime).format('MMM D');
   const arrTime = dayjs(ArrivalTime).format('HH:mm');
