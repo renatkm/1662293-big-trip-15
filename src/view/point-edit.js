@@ -1,4 +1,4 @@
-export const createEditPointComponent = () => `<li class="trip-events__item">
+export const createPointEditTemplate = () => `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
