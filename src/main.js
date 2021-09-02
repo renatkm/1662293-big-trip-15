@@ -1,6 +1,8 @@
 import {createMenuTemplate} from './view/site-menu.js';
 import {createFilterTemplate} from './view/filter.js';
 import {createTripInfoTemplate} from './view/tripInfo.js';
+import {createTripSummaryTemplate} from './view/tripSummary.js';
+import {createTripCostTemplate} from './view/tripCost.js';
 import {createSortingTemplate} from './view/sorting.js';
 import {createListTemplate} from './view/point-list.js';
 import {createPointEditTemplate} from './view/point-edit.js';
@@ -19,6 +21,12 @@ const pointListElement = document.querySelector('.trip-events');
 const TRIP_POINTS_COUNT = 3;
 
 render(siteTripMainElement, createTripInfoTemplate(), 'afterbegin');
+
+const tripInfoElement = siteTripMainElement.querySelector('.trip-info');
+render(tripInfoElement, createTripSummaryTemplate(), 'afterbegin');
+render(tripInfoElement, createTripCostTemplate(), 'beforeend');
+
+
 render(siteHeaderElement, createMenuTemplate(), 'beforeend');
 render(filterElement, createFilterTemplate(), 'beforeend');
 
