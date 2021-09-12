@@ -7,6 +7,7 @@ import {createSortingTemplate} from './view/sorting.js';
 import {createListTemplate} from './view/point-list.js';
 import {createPointEditTemplate} from './view/point-edit.js';
 import {createPointTemplate} from './view/point.js';
+import { generatePoint } from './mock/point.js';
 
 const render = (container, component, place) => {
   container.insertAdjacentHTML(place, component);
@@ -18,7 +19,7 @@ const siteHeaderElement = siteMenuElement.querySelector('.trip-controls__navigat
 const filterElement = siteMenuElement.querySelector('.trip-controls__filters');
 const pointListElement = document.querySelector('.trip-events');
 
-const TRIP_POINTS_COUNT = 3;
+const TRIP_POINTS_COUNT = 15;
 
 render(siteTripMainElement, createTripInfoTemplate(), 'afterbegin');
 
@@ -35,8 +36,11 @@ render(pointListElement, createListTemplate(), 'beforeend');
 
 const tripPointsListElement = pointListElement.querySelector('.trip-events__list');
 
-render(tripPointsListElement, createPointEditTemplate(), 'beforeend');
+const pointToEdit = generatePoint();
 
+render(tripPointsListElement, createPointEditTemplate(pointToEdit), 'beforeend');
+let pointItem = pointToEdit;
 for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
-  render(tripPointsListElement, createPointTemplate(), 'beforeend');
+  pointItem = generatePoint(pointItem);
+  render(tripPointsListElement, createPointTemplate(pointItem), 'beforeend');
 }
