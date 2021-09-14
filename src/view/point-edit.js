@@ -1,39 +1,45 @@
-import { DestinationList, PointTypeList } from '../const.js';
-import { getOfferListByEventType } from '../utils.js';
+import {DESTINATIONS, POINT_TYPES} from '../const.js';
+import {getOfferListByPointType} from '../utils.js';
 
-const createPointEditPointTypesTemplate = (pointName) =>PointTypeList.map((pointType) => {
-  const className = pointName.toLowerCase();
+const createPointEditTypesTemplate = (pointName) =>POINT_TYPES.map((pointType) => {
+  const className = pointType.toLowerCase();
 
   return `<div class="event__type-item">
-    <input id="event-type-${className}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${className}" ${pointType === pointName ? 'checked' : ''}>
-    <label class="event__type-label  event__type-label--${className}" for="event-type-${className}-1">${pointName}</label>
+    <input id="event-type-${className}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${className}" ${pointType === pointName ? 'checked' : ''}>
+    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-1">${pointType}</label>
     </div>`;
 }).join('');
 
-const createPointEditDestinatioTemplate = (destination) => `<input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+const createPointEditDestinationTemplate = (destination) => `<input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
   <datalist id="destination-list-1">
-    ${DestinationList.map((city) => `<option value="${city}"></option>`).join('')}
+    ${DESTINATIONS.map((city) => `<option value="${city}"></option>`).join('')}
   </datalist>`;
+
+const generateClassName = (offerName) => offerName.replace(' ', '-').toLowerCase();
 
 const createPointEditOfferTemplate = (offer, isChecked) => {
   const {
-    Name = '',
-    ClassName = '',
-    Cost = 0,
+    name = '',
+    cost = 0,
   } = offer;
 
+  const className = generateClassName(name);
   return `<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-${ClassName}" ${isChecked ? 'checked': ''}>
-  <label class="event__offer-label" for="event-offer-${ClassName}-1">
-    <span class="event__offer-title">${Name}</span>
+  <input class="event__offer-checkbox visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${isChecked ? 'checked': ''}>
+  <label class="event__offer-label" for="event-offer-${className}-1">
+    <span class="event__offer-title">${name}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${Cost}</span>
+    <span class="event__offer-price">${cost}</span>
   </label>
   </div>`;
 };
 
 const createPointEditOffersTemplate = (offers, eventType) => {
-  const availableOffers = getOfferListByEventType(eventType);
+  const availableOffers = getOfferListByPointType(eventType);
+  if (!availableOffers){
+    return '<div class="event__available-offers">No available offers</div>';
+  }
+
   const notCheckedOffers = offers !== null ? availableOffers.filter((ele)=> !offers.includes(ele)): availableOffers;
 
   return `<div class="event__available-offers">
@@ -44,7 +50,7 @@ const createPointEditOffersTemplate = (offers, eventType) => {
 
 const createDestinationPhotosTemplate = (photos) => photos.map((url) => `<img class="event__photo" src="${url}" alt="Event photo"></img>`).join('');
 
-export const createPointEditTemplate = (point = {}) => {
+export const createPointEditTemplate = (point) => {
   const {
     Destination= '',
     PointType = '',
@@ -56,10 +62,11 @@ export const createPointEditTemplate = (point = {}) => {
     Photos = null,
   } = point;
 
-  const pointTypesTemplate = createPointEditPointTypesTemplate(PointType);
+  const pointTypesTemplate = createPointEditTypesTemplate(PointType);
   const offersTemplate = createPointEditOffersTemplate(Offers, PointType);
-  const destinationsTemplate = createPointEditDestinatioTemplate(Destination);
+  const destinationsTemplate = createPointEditDestinationTemplate(Destination);
   const destinationPhotosTemplate = createDestinationPhotosTemplate(Photos);
+  const className = PointType.toLowerCase();
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -67,7 +74,7 @@ export const createPointEditTemplate = (point = {}) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${PointType}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${className}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -122,10 +129,6 @@ export const createPointEditTemplate = (point = {}) => {
         <div class="event__photos-container">
                       <div class="event__photos-tape">
                         ${destinationPhotosTemplate}
-                        <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
                       </div>
                     </div>
       </section>
@@ -133,4 +136,3 @@ export const createPointEditTemplate = (point = {}) => {
   </form>
 </li> `;
 };
-

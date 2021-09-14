@@ -1,14 +1,14 @@
-import { getTimePart, getDiffTime, getDatePart, getHumanizedDate } from '../utils';
+import {getTimePart, getDiffTime, getDatePart, getHumanizedDate} from '../utils';
 
 const createOfferListTemplate =(offers) => {
   if (offers === null){
     return '';
   }
 
-  return offers.map(({Name, Cost}) =>`<li class="event__offer">
-  <span class="event__offer-title">${Name}</span>
+  return offers.map(({name, cost}) =>`<li class="event__offer">
+  <span class="event__offer-title">${name}</span>
   &plus;&euro;&nbsp;
-  <span class="event__offer-price">${Cost}</span>
+  <span class="event__offer-price">${cost}</span>
 </li>`).join('');
 };
 
