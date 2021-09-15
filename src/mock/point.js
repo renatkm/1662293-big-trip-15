@@ -10,22 +10,27 @@ const generateDescription = () => {
   return `${new Array(n).fill().map(() => sentenses[getRandomInteger(0, sentenses.length-1)]).join('.').trimLeft()  }.`;
 };
 
-const getRandomPointType= () =>getRandomItem(POINT_TYPES);
+const getRandomPointType= () => getRandomItem(POINT_TYPES);
 
-const getRandomDestination= () =>getRandomItem(DESTINATIONS);
+const getRandomDestination= () => getRandomItem(DESTINATIONS);
 
 const generateArrivalTime = (startTime) => {
+  const intervalLengthMinutes = 15;
+  const maxIntervalLengthMinutes= 2*24*60;
+  const maxIntervalsNumber = Math.floor(maxIntervalLengthMinutes/intervalLengthMinutes);
+
   if (!startTime){
     startTime = dayjs();
-    startTime = startTime.add(15- (startTime.minute() % 15), 'minutes');
+    startTime = startTime.add(intervalLengthMinutes- (startTime.minute() % intervalLengthMinutes), 'minutes');
   }
 
-  const intervals30m = getRandomInteger(1, 96)*15;
-  return startTime.add(intervals30m, 'minutes');
+  const interval = getRandomInteger(1, maxIntervalsNumber)*intervalLengthMinutes;
+
+  return startTime.add(interval, 'minutes');
 };
 
-const getAnyOffers = (pointType) =>{
-  const availableOffers =getOfferListByPointType(pointType);
+const getAnyOffers = (pointType) => {
+  const availableOffers = getOfferListByPointType(pointType);
   if (!availableOffers){
     return null;
   }
@@ -33,7 +38,7 @@ const getAnyOffers = (pointType) =>{
   const maxNumberOfOffers = availableOffers.length;
   const numberOfOffers = getRandomInteger(0, Math.min(maxNumberOfOffers-1, 4));
 
-  if (numberOfOffers===0){
+  if (numberOfOffers === 0){
     return null;
   }
 
@@ -48,32 +53,26 @@ const getAnyOffers = (pointType) =>{
 
 const getPhotos = () => {
   const imagesNumber = getRandomInteger(1,5);
+
   return new Array(imagesNumber).fill().map(() => `http://picsum.photos/248/152?r=${getRandomInteger(0,1024)}`);
 };
 
-export const  generatePoint = (prevPoint) => {
-  const {Destination, DepartureTime} = !prevPoint ?
-    {
-      Destination : getRandomDestination(),
-      DepartureTime: null,
-    }
-    : prevPoint;
-
-  const arrivalTime = generateArrivalTime(DepartureTime);
+export const  generatePoint = () => {
+  const arrivalTime = generateArrivalTime(dayjs());
   const departureTime = generateArrivalTime(arrivalTime);
   const pointType = getRandomPointType();
 
   return {
-    Name : pointType,
-    Origin: Destination,
-    Destination: getRandomDestination(),
-    PointType : pointType,
-    ArrivalTime : arrivalTime,
-    DepartureTime : departureTime,
-    Description: generateDescription(),
-    Cost: getRandomInteger(0, 300),
-    IsFavorite: false,
-    Offers: getAnyOffers(pointType),
-    Photos: getPhotos(),
+    name : pointType,
+    origin: getRandomDestination(),
+    destination: getRandomDestination(),
+    pointType : pointType,
+    arrivalTime : arrivalTime,
+    departureTime : departureTime,
+    description: generateDescription(),
+    cost: getRandomInteger(0, 300),
+    isFavorite: false,
+    offers: getAnyOffers(pointType),
+    photos: getPhotos(),
   };
 };

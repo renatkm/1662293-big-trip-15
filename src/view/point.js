@@ -14,33 +14,33 @@ const createOfferListTemplate =(offers) => {
 
 export const createPointTemplate = (point) =>  {
   const {
-    PointType = '',
-    Destination = '',
-    ArrivalTime = null,
-    DepartureTime = null,
-    Cost = 0,
-    Offers = null,
+    pointType = '',
+    destination = '',
+    arrivalTime = null,
+    departureTime = null,
+    cost = 0,
+    offers = null,
   } = point;
 
-  const offerListTemplate = createOfferListTemplate(Offers);
+  const offerListTemplate = createOfferListTemplate(offers);
 
   return `<li class="trip-events__item">
 <div class="event">
-  <time class="event__date" datetime="${getDatePart(ArrivalTime)}">${getHumanizedDate(ArrivalTime)}</time>
+  <time class="event__date" datetime="${getDatePart(arrivalTime)}">${getHumanizedDate(arrivalTime)}</time>
   <div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${PointType}.png" alt="Event type icon">
+    <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType}.png" alt="Event type icon">
   </div>
-  <h3 class="event__title">${PointType} ${Destination}</h3>
+  <h3 class="event__title">${pointType} ${destination}</h3>
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime="${ArrivalTime}">${getTimePart(ArrivalTime)}</time>
+      <time class="event__start-time" datetime="${arrivalTime}">${getTimePart(arrivalTime)}</time>
       &mdash;
-      <time class="event__end-time" datetime="${DepartureTime}">${getTimePart(DepartureTime)}</time>
+      <time class="event__end-time" datetime="${departureTime}">${getTimePart(departureTime)}</time>
     </p>
-    <p class="event__duration">${getDiffTime(DepartureTime, ArrivalTime)}</p>
+    <p class="event__duration">${getDiffTime(departureTime, arrivalTime)}</p>
   </div>
   <p class="event__price">
-    &euro;&nbsp;<span class="event__price-value">${Cost}</span>
+    &euro;&nbsp;<span class="event__price-value">${cost}</span>
   </p>
   <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">

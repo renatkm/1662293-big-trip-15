@@ -1,5 +1,5 @@
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
-import {getOfferListByPointType} from '../utils.js';
+import {getOfferListByPointType, getHumanizedDateTime} from '../utils.js';
 
 const createPointEditTypesTemplate = (pointName) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -15,7 +15,7 @@ const createPointEditDestinationTemplate = (destination) => `<input class="event
     ${DESTINATIONS.map((city) => `<option value="${city}"></option>`).join('')}
   </datalist>`;
 
-const generateClassName = (offerName) => offerName.replace(' ', '-').toLowerCase();
+const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
 
 const createPointEditOfferTemplate = (offer, isChecked) => {
   const {
@@ -37,36 +37,56 @@ const createPointEditOfferTemplate = (offer, isChecked) => {
 const createPointEditOffersTemplate = (offers, eventType) => {
   const availableOffers = getOfferListByPointType(eventType);
   if (!availableOffers){
-    return '<div class="event__available-offers">No available offers</div>';
+    return '';
   }
 
   const notCheckedOffers = offers !== null ? availableOffers.filter((ele)=> !offers.includes(ele)): availableOffers;
 
-  return `<div class="event__available-offers">
+  return `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
   ${offers !==null ? offers.map((offer) => createPointEditOfferTemplate(offer, true)).join('') :''}
   ${notCheckedOffers.map((offer) => createPointEditOfferTemplate(offer, false) ).join('')}
-  </div>`;
+    </div>
+  </section>`;
 };
 
-const createDestinationPhotosTemplate = (photos) => photos.map((url) => `<img class="event__photo" src="${url}" alt="Event photo"></img>`).join('');
+const createPointEditDescriptionTemplate = (description, photos) => {
+  if (!description){
+    return '';
+  }
+
+  const photosTemplate = photos.map((url) => `<img class="event__photo" src="${url}" alt="Event photo"></img>`).join('');
+
+  return `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${description}</p>
+
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${photosTemplate}
+        </div>
+      </div>
+    </section>`;
+};
 
 export const createPointEditTemplate = (point) => {
   const {
-    Destination= '',
-    PointType = '',
-    ArrivalTime = null,
-    DepartureTime = null,
-    Description= '',
-    Cost= 0,
-    Offers= null,
-    Photos = null,
+    destination= '',
+    pointType = '',
+    arrivalTime = null,
+    departureTime = null,
+    description= '',
+    cost= 0,
+    offers= null,
+    photos = null,
   } = point;
 
-  const pointTypesTemplate = createPointEditTypesTemplate(PointType);
-  const offersTemplate = createPointEditOffersTemplate(Offers, PointType);
-  const destinationsTemplate = createPointEditDestinationTemplate(Destination);
-  const destinationPhotosTemplate = createDestinationPhotosTemplate(Photos);
-  const className = PointType.toLowerCase();
+  const pointTypesTemplate = createPointEditTypesTemplate(pointType);
+  const offersTemplate = createPointEditOffersTemplate(offers, pointType);
+  const destinationsTemplate = createPointEditDestinationTemplate(destination);
+  const descriptionTemplate = createPointEditDescriptionTemplate(description, photos);
+  const className = pointType.toLowerCase();
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -88,17 +108,17 @@ export const createPointEditTemplate = (point) => {
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          ${PointType}
+          ${pointType}
         </label>
         ${destinationsTemplate}
       </div>
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${ArrivalTime}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getHumanizedDateTime(arrivalTime)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${DepartureTime}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getHumanizedDateTime(departureTime)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -106,7 +126,7 @@ export const createPointEditTemplate = (point) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${Cost}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${cost}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -116,22 +136,8 @@ export const createPointEditTemplate = (point) => {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        ${offersTemplate}
-      </section>
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${Description}</p>
-
-        <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${destinationPhotosTemplate}
-                      </div>
-                    </div>
-      </section>
+      ${offersTemplate}
+      ${descriptionTemplate}
     </section>
   </form>
 </li> `;
