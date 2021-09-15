@@ -17,39 +17,33 @@ const createPointEditDestinationTemplate = (destination) => `<input class="event
 
 const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
 
-const createPointEditOfferTemplate = (offer, isChecked) => {
-  const {
-    name = '',
-    cost = 0,
-  } = offer;
+const isOfferChecked = (offer, checkedOffers) => checkedOffers ? checkedOffers.some((checkedOffer) => checkedOffer.name === offer.name) : false;
 
-  const className = generateClassName(name);
-  return `<div class="event__offer-selector">
-  <input class="event__offer-checkbox visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${isChecked ? 'checked': ''}>
-  <label class="event__offer-label" for="event-offer-${className}-1">
-    <span class="event__offer-title">${name}</span>
-    &plus;&euro;&nbsp;
-    <span class="event__offer-price">${cost}</span>
-  </label>
-  </div>`;
-};
+const createPointEditOffersTemplate = (availableOffers, checkedOffers) => (
+  `
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+    ${
+  availableOffers.map((offer, index) => {
+    const className = generateClassName(offer.name);
+    const isChecked = isOfferChecked(offer, checkedOffers);
 
-const createPointEditOffersTemplate = (offers, eventType) => {
-  const availableOffers = getOfferListByPointType(eventType);
-  if (!availableOffers){
-    return '';
+    return `
+      <div class="event__offer-selector">
+          <input class="event__offer-checkbox visually-hidden" id="event-offer-${className}-${index}" type="checkbox" name="event-offer-${className}" ${isChecked ? 'checked': ''}>
+          <label class="event__offer-label" for="event-offer-${className}-${index}">
+           <span class="event__offer-title">${offer.name}</span>
+            &plus;&euro;&nbsp;
+          <span class="event__offer-price">${offer.cost}</span>
+        </label>
+      </div>
+      `;
+  })
   }
-
-  const notCheckedOffers = offers !== null ? availableOffers.filter((ele)=> !offers.includes(ele)): availableOffers;
-
-  return `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-      <div class="event__available-offers">
-  ${offers !==null ? offers.map((offer) => createPointEditOfferTemplate(offer, true)).join('') :''}
-  ${notCheckedOffers.map((offer) => createPointEditOfferTemplate(offer, false) ).join('')}
     </div>
-  </section>`;
-};
+  </section>`
+);
 
 const createPointEditDescriptionTemplate = (description, photos) => {
   if (!description){
@@ -72,18 +66,19 @@ const createPointEditDescriptionTemplate = (description, photos) => {
 
 export const createPointEditTemplate = (point) => {
   const {
-    destination= '',
+    destination = '',
     pointType = '',
     arrivalTime = null,
     departureTime = null,
-    description= '',
-    cost= 0,
-    offers= null,
+    description = '',
+    cost = 0,
+    offers = null,
     photos = null,
   } = point;
 
   const pointTypesTemplate = createPointEditTypesTemplate(pointType);
-  const offersTemplate = createPointEditOffersTemplate(offers, pointType);
+  const availableOffers = getOfferListByPointType(pointType);
+  const offersTemplate = availableOffers ? createPointEditOffersTemplate(availableOffers, offers) : '';
   const destinationsTemplate = createPointEditDestinationTemplate(destination);
   const descriptionTemplate = createPointEditDescriptionTemplate(description, photos);
   const className = pointType.toLowerCase();
