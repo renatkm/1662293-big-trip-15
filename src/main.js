@@ -8,7 +8,7 @@ import PointListView from './view/point-list.js';
 import PointEditView from './view/point-edit.js';
 import PointView from './view/point.js';
 import {generatePoint} from './mock/point.js';
-import {renderElement,RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils.js';
 
 
 const siteTripMainElement  = document.querySelector('.trip-main');
@@ -21,21 +21,21 @@ const TRIP_POINTS_COUNT = 15;
 
 const points = new Array(TRIP_POINTS_COUNT).fill().map(generatePoint);
 
-renderElement(siteTripMainElement, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
+render(siteTripMainElement, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
 
 const tripInfoElement = siteTripMainElement.querySelector('.trip-info');
-renderElement(tripInfoElement, new TripSummaryView().getElement(), RenderPosition.AFTERBEGIN);
-renderElement(tripInfoElement, new TripCostView().getElement(), RenderPosition.BEFOREEND);
+render(tripInfoElement, new TripSummaryView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripInfoElement, new TripCostView().getElement(), RenderPosition.BEFOREEND);
 
-renderElement(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-renderElement(filterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
+render(filterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 
-renderElement(pointListElement, new SortView().getElement(), RenderPosition.BEFOREEND);
-renderElement(pointListElement, new PointListView().getElement(), RenderPosition.BEFOREEND);
+render(pointListElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+render(pointListElement, new PointListView().getElement(), RenderPosition.BEFOREEND);
 
 const tripPointsListElement = pointListElement.querySelector('.trip-events__list');
-renderElement(tripPointsListElement, new PointEditView(points[0]).getElement(), RenderPosition.BEFOREEND);
+render(tripPointsListElement, new PointEditView(points[0]).getElement(), RenderPosition.BEFOREEND);
 
 for (let i = 1; i < TRIP_POINTS_COUNT; i++) {
-  renderElement(tripPointsListElement, new PointView(points[i]).getElement(), RenderPosition.BEFOREEND);
+  render(tripPointsListElement, new PointView(points[i]).getElement(), RenderPosition.BEFOREEND);
 }
