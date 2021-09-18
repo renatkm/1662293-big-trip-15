@@ -36,3 +36,26 @@ export const getDiffTime = (datetime1, datetime2) =>{
 
   return  `${days ? `${days}D ` : ''}${hours ? `${hours}H ` : ''}${minutes ? `${minutes}M` : ''}`.trim();
 };
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+export const renderElement = (container, element, place) => {
+  switch(place){
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};

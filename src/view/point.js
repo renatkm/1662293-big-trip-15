@@ -1,4 +1,4 @@
-import {getTimePart, getDiffTime, getDatePart, getHumanizedDate} from '../utils';
+import {getTimePart, getDiffTime, getDatePart, getHumanizedDate,createElement} from '../utils';
 
 const createOfferListTemplate =(offers) => {
   if (offers === null){
@@ -12,7 +12,7 @@ const createOfferListTemplate =(offers) => {
 </li>`).join('');
 };
 
-export const createPointTemplate = (point) =>  {
+const createPointTemplate = (point) =>  {
   const {
     pointType = '',
     destination = '',
@@ -58,3 +58,27 @@ export const createPointTemplate = (point) =>  {
 </div>
 </li>`;
 };
+
+
+export default class Point {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element){
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createSortingTemplate = () => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+import {createElement} from '../utils';
+
+const createSortingTemplate = () => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     <div class="trip-sort__item  trip-sort__item--day">
       <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
       <label class="trip-sort__btn" for="sort-day">Day</label>
@@ -24,3 +26,25 @@ export const createSortingTemplate = () => `<form class="trip-events__trip-sort 
       <label class="trip-sort__btn" for="sort-offer">Offers</label>
     </div>
   </form>`;
+
+export default class Sort{
+  constructor() {
+    this._newElement = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate();
+  }
+
+  getElement() {
+    if (!this._newElement){
+      this._newElement = createElement(this.getTemplate());
+    }
+
+    return this._newElement;
+  }
+
+  removeElement() {
+    this._newElement = null;
+  }
+}
