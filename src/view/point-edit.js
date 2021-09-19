@@ -1,5 +1,5 @@
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
-import {getOfferListByPointType, getHumanizedDateTime} from '../utils.js';
+import {getOfferListByPointType, getHumanizedDateTime, createElement} from '../utils.js';
 
 const createPointEditTypesTemplate = (pointName) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -64,7 +64,7 @@ const createPointEditDescriptionTemplate = (description, photos) => {
     </section>`;
 };
 
-export const createPointEditTemplate = (point) => {
+const createPointEditTemplate = (point) => {
   const {
     destination = '',
     pointType = '',
@@ -137,3 +137,26 @@ export const createPointEditTemplate = (point) => {
   </form>
 </li> `;
 };
+
+export default class PointEdit {
+  constructor(point) {
+    this._point = point;
+    this._newElement = null;
+  }
+
+  getTemplate() {
+    return createPointEditTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._newElement){
+      this._newElement = createElement(this.getTemplate());
+    }
+
+    return this._newElement;
+  }
+
+  removeElement() {
+    this._newElement = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createFilterTemplate = () => `<form class="trip-filters" action="#" method="get">
+import { createElement } from '../utils';
+
+const createFilterTemplate = () => `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
       <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
       <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
@@ -16,3 +18,25 @@ export const createFilterTemplate = () => `<form class="trip-filters" action="#"
 
     <button class="visually-hidden" type="submit">Accept filter</button>
   </form>`;
+
+export default class Filter {
+  constructor() {
+    this._newElement = null;
+  }
+
+  getTemplate() {
+    return createFilterTemplate();
+  }
+
+  getElement() {
+    if (!this._newElement){
+      this._newElement = createElement(this.getTemplate());
+    }
+
+    return this._newElement;
+  }
+
+  removeElement() {
+    this._newElement = null;
+  }
+}
