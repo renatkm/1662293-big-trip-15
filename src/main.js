@@ -20,6 +20,30 @@ const TRIP_POINTS_COUNT = 15;
 
 const points = new Array(TRIP_POINTS_COUNT).fill().map(generatePoint);
 
+const renderPoint = (locationElement, point) => {
+  const pointComponent = new PointView(point);
+  const pointEditComponent = new PointEditView(point);
+
+  const replaceViewToEdit = () => {
+    locationElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceEditToView =() => {
+    locationElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceViewToEdit();
+  });
+
+  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceEditToView();
+  });
+
+  render(locationElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
 const tripInfoView = new TripInfoView();
 render(siteTripMainElement, tripInfoView.getElement(), RenderPosition.AFTERBEGIN);
 render(tripInfoView.getElement(), new TripSummaryView().getElement(), RenderPosition.AFTERBEGIN);
@@ -30,8 +54,7 @@ render(pointListElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 
 const pointListView = new PointListView();
 render(pointListElement,  pointListView.getElement(), RenderPosition.BEFOREEND);
-render(pointListView.getElement(), new PointEditView(points[0]).getElement(), RenderPosition.BEFOREEND);
 
-for (let i = 1; i < TRIP_POINTS_COUNT; i++) {
-  render(pointListView.getElement(), new PointView(points[i]).getElement(), RenderPosition.BEFOREEND);
+for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
+  renderPoint(pointListView.getElement(), points[i]);
 }
