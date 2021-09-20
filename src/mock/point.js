@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger, getRandomItem, getOfferListByPointType} from '../utils.js';
+import {getRandomInteger, getRandomItem} from '../utils/common.js';
+import {getOfferListByPointType} from '../utils/point.js';
 import {POINT_TYPES, DESTINATIONS} from '../const.js';
 
 const generateDescription = () => {
