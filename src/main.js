@@ -47,8 +47,7 @@ const renderPoint = (locationElement, point) => {
     document.addEventListener('keydown', keydownHandler);
   });
 
-  pointEditComponent.setFormSubmitHandler((evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceEditToView();
     document.removeEventListener('keydown', keydownHandler);
   });
