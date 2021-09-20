@@ -7,11 +7,14 @@ import TripInfoView from '../view/tripInfo.js';
 import TripCostView from '../view/tripCost.js';
 import TripSummaryView from '../view/tripSummary.js';
 import {render, RenderPosition} from '../utils/render.js';
+import {updatePoints} from '../utils/point.js';
 
 export default class Route {
   constructor(routeContainer) {
     //Инициализация контейнера
     this._routeContainer = routeContainer;
+    this._pointCollection = new Map();
+
     this._routeComponent = new RouteView();
     this._sortComponent = new SortView();
     this._pointsComponent = new PointListView();
@@ -20,9 +23,7 @@ export default class Route {
     this._tripCostComponent = new TripCostView();
     this._tripSummaryComponent = new TripSummaryView();
 
-    render(this._routeContainer, this._routeComponent, RenderPosition.BEFOREEND);
-    render(this._routeComponent, this._sortComponent, RenderPosition.BEFOREEND);
-    render(this._routeComponent, this._pointsComponent, RenderPosition.BEFOREEND);
+    this._handlePointUpdate = this._handlePointUpdate.bind(this);
   }
 
   init(points) {
@@ -32,6 +33,10 @@ export default class Route {
   }
 
   _renderRoute() {
+    render(this._routeContainer, this._routeComponent, RenderPosition.BEFOREEND);
+    render(this._routeComponent, this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._routeComponent, this._pointsComponent, RenderPosition.BEFOREEND);
+
     if (!this._points.length) {
       this._renderNoPoints();
     }
@@ -40,6 +45,11 @@ export default class Route {
       this._renderSort();
       this._renderPoints();
     }
+  }
+
+  _handlePointUpdate(updatedPoint) {
+    this._points = updatePoints(this._points, updatedPoint);
+    this._pointCollection.get(updatedPoint.id).init(updatedPoint);
   }
 
   _renderInfo() {
@@ -58,9 +68,9 @@ export default class Route {
 
   _renderPoint(point) {
     //Создание и редактирование точки маршрута.
-    const pointPresenter = new PointPresenter(this._pointsComponent);
-
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointUpdate);
     pointPresenter.init(point);
+    this._pointCollection.set(point.id, pointPresenter);
   }
 
   _renderPoints() {
@@ -70,6 +80,11 @@ export default class Route {
     for (let i = 0; i < this._points.length; i++) {
       this._renderPoint(this._points[i]);
     }
+  }
+
+  _clearPointList() {
+    this._pointCollection.forEach((presenter) => presenter.delete());
+    this._pointCollection.clear();
   }
 
   _renderNoPoints() {
