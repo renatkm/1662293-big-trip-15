@@ -1,5 +1,7 @@
+import AbstractView from './abstract.js';
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
-import {getOfferListByPointType, getHumanizedDateTime, createElement} from '../utils.js';
+import {getHumanizedDateTime} from '../utils/common.js';
+import {getOfferListByPointType} from '../utils/point.js';
 
 const createPointEditTypesTemplate = (pointName) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -138,25 +140,36 @@ const createPointEditTemplate = (point) => {
 </li> `;
 };
 
-export default class PointEdit {
+export default class PointEdit extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._newElement = null;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createPointEditTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._newElement){
-      this._newElement = createElement(this.getTemplate());
-    }
-
-    return this._newElement;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._newElement = null;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

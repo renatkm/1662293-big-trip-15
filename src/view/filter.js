@@ -1,4 +1,4 @@
-import { createElement } from '../utils';
+import AbstractView from './abstract.js';
 
 const createFilterTemplate = () => `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
@@ -19,24 +19,8 @@ const createFilterTemplate = () => `<form class="trip-filters" action="#" method
     <button class="visually-hidden" type="submit">Accept filter</button>
   </form>`;
 
-export default class Filter {
-  constructor() {
-    this._newElement = null;
-  }
-
+export default class Filter extends AbstractView {
   getTemplate() {
     return createFilterTemplate();
-  }
-
-  getElement() {
-    if (!this._newElement){
-      this._newElement = createElement(this.getTemplate());
-    }
-
-    return this._newElement;
-  }
-
-  removeElement() {
-    this._newElement = null;
   }
 }
