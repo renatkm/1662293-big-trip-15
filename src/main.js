@@ -60,22 +60,18 @@ const renderPoint = (locationElement, point) => {
   render(locationElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-if (points.length>0){
+render(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
+render(filterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+
+if (!points.length) {
+  render(pointListElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
+}
+else {
   const tripInfoView = new TripInfoView();
 
   render(siteTripMainElement, tripInfoView.getElement(), RenderPosition.AFTERBEGIN);
   render(tripInfoView.getElement(), new TripSummaryView().getElement(), RenderPosition.AFTERBEGIN);
   render(tripInfoView.getElement(), new TripCostView().getElement(), RenderPosition.BEFOREEND);
-}
-
-render(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-render(filterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
-
-
-if (points.length===0){
-  render(pointListElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
-}
-else{
   render(pointListElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 
   const pointListView = new PointListView();

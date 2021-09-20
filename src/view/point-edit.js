@@ -39,7 +39,7 @@ const createPointEditOffersTemplate = (availableOffers, checkedOffers) => (
         </label>
       </div>
       `;
-  })
+  }).join('')
   }
     </div>
   </section>`
