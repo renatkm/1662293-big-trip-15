@@ -8,7 +8,7 @@ import {render, RenderPosition} from './utils/render.js';
 const siteMenuElement = document.querySelector('.trip-main__trip-controls');
 const siteHeaderElement = siteMenuElement.querySelector('.trip-controls__navigation');
 const filterElement = siteMenuElement.querySelector('.trip-controls__filters');
-const tripElement = document.querySelector('main > div.page-body__container');
+const tripElement = document.querySelector('.page-main > .page-body__container');
 const routePresenter = new RoutePresenter(tripElement);
 
 const TRIP_POINTS_COUNT = getRandomInteger(0, 15);
