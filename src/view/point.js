@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import {getTimePart, getDiffTime, getDatePart, getHumanizedDate} from '../utils/common.js';
+import {getTimePart, getHumanizedDiffTime, getDatePart, getHumanizedDate} from '../utils/common.js';
 
 const createOfferListTemplate =(offers) => {
   if (offers === null) {
@@ -40,7 +40,7 @@ const createPointTemplate = (point) =>  {
       &mdash;
       <time class="event__end-time" datetime="${departureTime}">${getTimePart(departureTime)}</time>
     </p>
-    <p class="event__duration">${getDiffTime(departureTime, arrivalTime)}</p>
+    <p class="event__duration">${getHumanizedDiffTime(departureTime, arrivalTime)}</p>
   </div>
   <p class="event__price">
     &euro;&nbsp;<span class="event__price-value">${cost}</span>
