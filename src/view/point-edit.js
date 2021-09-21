@@ -146,7 +146,7 @@ export default class PointEdit extends AbstractView {
     this._point = point;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._editClickHandler = this._editClickHandler.bind(this);
+    this._pointClickHandler = this._pointClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -155,12 +155,12 @@ export default class PointEdit extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
-  _editClickHandler(evt) {
+  _pointClickHandler(evt) {
     evt.preventDefault();
-    this._callback.editClick();
+    this._callback.pointClick();
   }
 
   setFormSubmitHandler(callback) {
@@ -168,8 +168,8 @@ export default class PointEdit extends AbstractView {
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  setPointClickHandler(callback) {
+    this._callback.pointClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
   }
 }
