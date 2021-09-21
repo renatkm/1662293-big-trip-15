@@ -24,6 +24,7 @@ export default class Route {
     this._tripSummaryComponent = new TripSummaryView();
 
     this._handlePointUpdate = this._handlePointUpdate.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(points) {
@@ -52,6 +53,10 @@ export default class Route {
     this._pointCollection.get(updatedPoint.id).init(updatedPoint);
   }
 
+  _handleModeChange() {
+    this._pointCollection.forEach((presenter) => presenter.resetView());
+  }
+
   _renderInfo() {
     // Отрисовка информации по маршруту -откуда куда, когда и общая стоимость
     const siteTripMainElement  = document.querySelector('.trip-main');
@@ -68,7 +73,7 @@ export default class Route {
 
   _renderPoint(point) {
     //Создание и редактирование точки маршрута.
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointUpdate);
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointUpdate, this._handleModeChange);
     pointPresenter.init(point);
     this._pointCollection.set(point.id, pointPresenter);
   }
