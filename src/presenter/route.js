@@ -73,8 +73,6 @@ export default class Route {
   }
 
   _sortPoints(sortType) {
-    console.log(sortType);
-
     switch(sortType) {
       case SortType.PRICE.name:
         this._points.sort(comparePointCost);
