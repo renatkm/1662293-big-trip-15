@@ -1,4 +1,5 @@
 import {OFFERS} from '../const.js';
+import {getDiffTime} from './common.js';
 
 export const getOfferListByPointType = (pointType) =>  {
   const filteredOffers = OFFERS.find((offer) => offer.type === pointType);
@@ -18,3 +19,9 @@ export const updatePoints = (points, point) => {
     ...points.slice(index + 1),
   ];
 };
+
+export const comparePointCost = (pointA, pointB) => pointA.cost - pointB.cost;
+
+export const comparePointDate = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointA.arrivalTime);
+
+export const comparePointLength = (pointA, pointB) => getDiffTime(pointA.arrivalTime, pointA.departureTime) - getDiffTime(pointB.arrivalTime, pointB.departureTime);

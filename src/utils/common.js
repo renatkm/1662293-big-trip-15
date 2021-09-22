@@ -16,11 +16,11 @@ export const getTimePart = (datetime) => dayjs(datetime).format('HH:mm');
 
 export const getDatePart = (datetime) => dayjs(datetime).format('YYYY-MM-DD');
 
-export const getHumanizedDate = (datetime) => dayjs(getDatePart(datetime)).format('MMM-DD');
+export const getHumanizedDate = (datetime) => dayjs(getDatePart(datetime)).format('MMM DD');
 
 export const getHumanizedDateTime = (datetime) => dayjs(datetime).format('DD/MM/YY HH:mm');
 
-export const getDiffTime = (datetime1, datetime2) =>{
+export const getHumanizedDiffTime = (datetime1, datetime2) =>{
   let diff = dayjs(datetime1).diff(dayjs(datetime2), 'minute');
   const days = Math.floor(diff/MINUTES_IN_A_DAY_NUMBER);
   diff = diff % MINUTES_IN_A_DAY_NUMBER;
@@ -29,3 +29,5 @@ export const getDiffTime = (datetime1, datetime2) =>{
 
   return  `${days ? `${days}D ` : ''}${hours ? `${hours}H ` : ''}${minutes ? `${minutes}M` : ''}`.trim();
 };
+
+export const getDiffTime = (arrivalTime, departureTime) => dayjs(departureTime).diff(dayjs(arrivalTime));
