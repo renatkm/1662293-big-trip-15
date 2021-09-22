@@ -20,8 +20,8 @@ export const updatePoints = (points, point) => {
   ];
 };
 
-export const comparePointCost = (pointA, pointB) => pointB.cost - pointA.cost;
+export const comparePointCost = (pointA, pointB) => pointA.cost - pointB.cost;
 
-export const comparePointDate = (pointA, pointB) => pointA.departureTime - pointB.departureTime;
+export const comparePointDate = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointA.arrivalTime);
 
-export const comparePointLength = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointB.departureTime) - getDiffTime(pointA.arrivalTime, pointA.departureTime);
+export const comparePointLength = (pointA, pointB) => getDiffTime(pointA.arrivalTime, pointA.departureTime) - getDiffTime(pointB.arrivalTime, pointB.departureTime);

@@ -2,23 +2,23 @@ import RouteView from '../view/route.js';
 import NoPointView from '../view/no-point.js';
 import PointListView from '../view/point-list.js';
 import PointPresenter from './point.js';
-import SortView from '../view/sorting.js';
+import SortingView from '../view/sorting.js';
 import TripInfoView from '../view/tripInfo.js';
 import TripCostView from '../view/tripCost.js';
 import TripSummaryView from '../view/tripSummary.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 import {comparePointDate, comparePointLength, comparePointCost, updatePoints} from '../utils/point.js';
-import {SortType} from '../const.js';
+import {SortTypes} from '../const.js';
 
 export default class Route {
   constructor(routeContainer) {
     //Инициализация контейнера
     this._routeContainer = routeContainer;
     this._pointCollection = new Map();
-    this._currentSortType = SortType.DAY.name;
+    this._currentSortType = SortTypes.DAY.name;
 
     this._routeComponent = new RouteView();
-    this._sortComponent = new SortView();
+    this._sortComponent = new SortingView();
     this._pointsComponent = new PointListView();
     this._noPointComponent = new NoPointView();
     this._tripInfoComponent = new TripInfoView();
@@ -48,6 +48,7 @@ export default class Route {
     }
 
     this._renderInfo();
+    this._sortPoints(this._currentSortType);
     this._renderSort(this._currentSortType);
     this._renderPoints();
   }
@@ -74,10 +75,10 @@ export default class Route {
 
   _sortPoints(sortType) {
     switch(sortType) {
-      case SortType.PRICE.name:
+      case SortTypes.PRICE.name:
         this._points.sort(comparePointCost);
         break;
-      case SortType.TIME.name:
+      case SortTypes.TIME.name:
         this._points.sort(comparePointLength);
         break;
       default:
@@ -100,7 +101,7 @@ export default class Route {
     // Сортировка точек маршрута
     const prevSortComponent = this._sortComponent;
 
-    this._sortComponent = new SortView(sortType);
+    this._sortComponent = new SortingView(sortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
     if (prevSortComponent === null) {

@@ -1,22 +1,22 @@
 import AbstractView from './abstract.js';
-import {SortType} from '../const.js';
+import {SortTypes} from '../const.js';
 
 const createSortingTemplate = (sortType) => {
-  const sortTypes = Object.values(SortType);
+  const sortTypes = Object.values(SortTypes);
   const getDisabled = (disabled) => disabled ? 'disabled' : '';
   const getChecked = (type) => sortType === type ? 'checked' : '';
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-  ${sortTypes.map(({name, disabled}) => `
-  <div class="trip-sort__item  trip-sort__item--${name}">
-  <input id="sort-${name}" class="trip-sort__input  visually-hidden" data-sort-type="${name}" type="radio" name="trip-sort" value="sort-${name}" ${getChecked(name)} ${getDisabled(disabled)}>
-  <label class="trip-sort__btn" for="sort-${name}">${name}</label>
-  </div>
+    ${sortTypes.map(({name, disabled}) => `
+    <div class="trip-sort__item  trip-sort__item--${name}">
+      <input id="sort-${name}" class="trip-sort__input  visually-hidden" data-sort-type="${name}" type="radio" name="trip-sort" value="sort-${name}" ${getChecked(name)} ${getDisabled(disabled)}>
+      <label class="trip-sort__btn" for="sort-${name}">${name}</label>
+    </div>
   `).join('')}
   </form>`;
 };
 
-export default class Sort extends AbstractView {
+export default class Sorting extends AbstractView {
   constructor(sortType) {
     super();
     this._sortType = sortType;
