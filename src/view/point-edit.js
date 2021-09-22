@@ -1,14 +1,15 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
 import {getHumanizedDateTime} from '../utils/common.js';
 import {getOfferListByPointType} from '../utils/point.js';
+import {generateDescription, getPhotos} from '../mock/point.js';
 
-const createPointEditTypesTemplate = (pointName) =>POINT_TYPES.map((pointType) => {
-  const className = pointType.toLowerCase();
+const createPointEditTypesTemplate = (pointTypes) =>pointTypes.map((point) => {
+  const {name, className, isChecked} = point;
 
   return `<div class="event__type-item">
-    <input id="event-type-${className}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${className}" ${pointType === pointName ? 'checked' : ''}>
-    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-1">${pointType}</label>
+    <input id="event-type-${className}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${className}" ${isChecked ? 'checked' : ''}>
+    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-1">${name}</label>
     </div>`;
 }).join('');
 
@@ -21,27 +22,22 @@ const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLower
 
 const isOfferChecked = (offer, checkedOffers) => checkedOffers ? checkedOffers.some((checkedOffer) => checkedOffer.name === offer.name) : false;
 
-const createPointEditOffersTemplate = (availableOffers, checkedOffers) => (
+const createPointEditOffersTemplate = (offers) => (
   `
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
     ${
-  availableOffers.map((offer, index) => {
-    const className = generateClassName(offer.name);
-    const isChecked = isOfferChecked(offer, checkedOffers);
-
-    return `
+  offers.map((offer, index) => `
       <div class="event__offer-selector">
-          <input class="event__offer-checkbox visually-hidden" id="event-offer-${className}-${index}" type="checkbox" name="event-offer-${className}" ${isChecked ? 'checked': ''}>
-          <label class="event__offer-label" for="event-offer-${className}-${index}">
+          <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.className}-${index}" type="checkbox" name="event-offer-${offer.className}" ${offer.isChecked ? 'checked': ''}>
+          <label class="event__offer-label" for="event-offer-${offer.className}-${index}">
            <span class="event__offer-title">${offer.name}</span>
             &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.cost}</span>
         </label>
       </div>
-      `;
-  }).join('')
+      `).join('')
   }
     </div>
   </section>`
@@ -66,21 +62,21 @@ const createPointEditDescriptionTemplate = (description, photos) => {
     </section>`;
 };
 
-const createPointEditTemplate = (point) => {
+const createPointEditTemplate = (data) => {
   const {
     destination = '',
     pointType = '',
+    pointTypes = null,
     arrivalTime = null,
     departureTime = null,
     description = '',
     cost = 0,
-    offers = null,
+    enhancedOffers = null,
     photos = null,
-  } = point;
+  } = data;
 
-  const pointTypesTemplate = createPointEditTypesTemplate(pointType);
-  const availableOffers = getOfferListByPointType(pointType);
-  const offersTemplate = availableOffers ? createPointEditOffersTemplate(availableOffers, offers) : '';
+  const pointTypesTemplate = createPointEditTypesTemplate(pointTypes);
+  const offersTemplate = enhancedOffers.length ? createPointEditOffersTemplate(enhancedOffers) : '';
   const destinationsTemplate = createPointEditDestinationTemplate(destination);
   const descriptionTemplate = createPointEditDescriptionTemplate(description, photos);
   const className = pointType.toLowerCase();
@@ -140,22 +136,65 @@ const createPointEditTemplate = (point) => {
 </li> `;
 };
 
-export default class PointEdit extends AbstractView {
+export default class PointEdit extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = PointEdit.parsePointToData(point);
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._pointClickHandler = this._pointClickHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createPointEditTemplate(this._point);
+    return createPointEditTemplate(this._data);
+  }
+
+  _typeChangeHandler(evt) {
+    if (evt.target.tagName === 'INPUT') {
+      this.updateData(
+        {
+          pointType: evt.target.value,
+          offers: getOfferListByPointType(evt.target.value),
+        },
+      );
+    }
+  }
+
+  _destinationChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData(
+      {
+        destination: evt.target.value,
+        description: generateDescription(),
+        photos: getPhotos(),
+      },
+    );
+  }
+
+  reset(point) {
+    this.updateData(
+      PointEdit.parsePointToData(point),
+    );
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-list').addEventListener('click', this._typeChangeHandler);
+    this.getElement().querySelector('.event__input').addEventListener('change', this._destinationChangeHandler);
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._point);
+    this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
   }
 
   _pointClickHandler(evt) {
@@ -171,5 +210,54 @@ export default class PointEdit extends AbstractView {
   setPointClickHandler(callback) {
     this._callback.pointClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
+  }
+
+  static parsePointToData(point) {
+    let availableOffers = getOfferListByPointType(point.pointType);
+
+    if (!availableOffers){
+      availableOffers = [];
+    }
+
+    return Object.assign(
+      {},
+      point,
+      {
+        enhancedOffers: availableOffers.map((availableOffer) => Object.assign(
+          {},
+          availableOffer,
+          {
+            isChecked: isOfferChecked(availableOffer, point.offers),
+            className: generateClassName(availableOffer.name),
+          },
+        )),
+        pointTypes: POINT_TYPES.map((pointName) => (
+          {
+            name: pointName,
+            isChecked: point.pointType === pointName,
+            className: pointName.toLowerCase(),
+          }),
+        ),
+      },
+    );
+  }
+
+  static parseDataToPoint(data) {
+    const point = Object.assign(
+      {},
+      data,
+      {
+        offers: data.enhancedOffers.filter((offer) => offer.isChecked).map((offer) => ({
+          name: offer.name,
+          cost: offer.cost,
+        })),
+        pointType: data.pointTypes.filter((pt) => pt.isChecked)[0].name,
+      },
+    );
+
+    delete point.enhancedOffers;
+    delete point.pointTypes;
+
+    return point;
   }
 }
