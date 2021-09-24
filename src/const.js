@@ -1,3 +1,4 @@
+import {generateText, getPhotos}  from './mock/point.js';
 
 export const OFFERS = [
   {
@@ -116,7 +117,37 @@ export const OFFERS = [
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
-export const DESTINATIONS = ['Geneva', 'Amsterdam', 'Paris', 'Berlin', 'Madrid'];
+export const DESTINATIONS = [
+  {
+    name: 'Geneva',
+    description: generateText(),
+    photos: getPhotos(),
+  },
+  {
+    name: 'Amsterdam',
+    description: generateText(),
+    photos : getPhotos(),
+  },
+  {
+    name: 'Lisbon',
+    description: generateText(),
+    photos : getPhotos(),
+  },
+  {
+    name: 'Paris',
+    description: generateText(),
+    photos : getPhotos(),
+  },
+  {
+    name: 'Berlin',
+    description: generateText(),
+    photos : getPhotos(),
+  },
+  {
+    name: 'Madrid',
+    description: generateText(),
+    photos : getPhotos(),
+  }];
 
 export const SortTypes = {
   DAY: {

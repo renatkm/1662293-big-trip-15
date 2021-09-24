@@ -4,7 +4,7 @@ import {getDiffTime} from './common.js';
 export const getOfferListByPointType = (pointType) =>  {
   const filteredOffers = OFFERS.find((offer) => offer.type === pointType);
 
-  return  filteredOffers ? filteredOffers.offers : null;
+  return  filteredOffers ? filteredOffers.offers : [];
 };
 
 export const updatePoints = (points, point) => {
@@ -20,7 +20,7 @@ export const updatePoints = (points, point) => {
   ];
 };
 
-export const comparePointCost = (pointA, pointB) => pointA.cost - pointB.cost;
+export const comparePointBasePrice = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
 
 export const comparePointDate = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointA.arrivalTime);
 
