@@ -7,7 +7,7 @@ import TripInfoView from '../view/tripInfo.js';
 import TripCostView from '../view/tripCost.js';
 import TripSummaryView from '../view/tripSummary.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import {comparePointDate, comparePointLength, comparePointCost, updatePoints} from '../utils/point.js';
+import {comparePointDate, comparePointLength, comparePointBasePrice, updatePoints} from '../utils/point.js';
 import {SortTypes} from '../const.js';
 
 export default class Route {
@@ -76,7 +76,7 @@ export default class Route {
   _sortPoints(sortType) {
     switch(sortType) {
       case SortTypes.PRICE.name:
-        this._points.sort(comparePointCost);
+        this._points.sort(comparePointBasePrice);
         break;
       case SortTypes.TIME.name:
         this._points.sort(comparePointLength);
