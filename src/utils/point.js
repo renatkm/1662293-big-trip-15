@@ -25,3 +25,7 @@ export const comparePointBasePrice = (pointA, pointB) => pointA.basePrice - poin
 export const comparePointDate = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointA.arrivalTime);
 
 export const comparePointLength = (pointA, pointB) => getDiffTime(pointA.arrivalTime, pointA.departureTime) - getDiffTime(pointB.arrivalTime, pointB.departureTime);
+
+export const isFuturePoint = (datetime) => getDiffTime(null, datetime) > 0;
+
+export const isPastPoint = (datetime) => getDiffTime(datetime, null) > 0;

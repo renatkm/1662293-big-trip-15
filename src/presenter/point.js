@@ -1,6 +1,7 @@
 import PointView from '../view/point.js';
 import PointEditView from '../view/point-edit.js';
 import {remove, render, RenderPosition, replace} from '../utils/render.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -19,6 +20,7 @@ export default class Point {
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleViewClick = this._handleViewClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -37,6 +39,7 @@ export default class Point {
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setPointClickHandler(this._handleViewClick);
+    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null){
       render(this._pointListContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -91,8 +94,20 @@ export default class Point {
     this._replaceViewToEdit();
   }
 
+  _handleDeleteClick(point) {
+    this._handlePointUpdate(
+      UserAction.DELETE_POINT,
+      UpdateType.MAJOR,
+      point,
+    );
+  }
+
   _handleFormSubmit(point) {
-    this._handlePointUpdate(point);
+    this._handlePointUpdate(
+      UserAction.UPDATE_POINT,
+      UpdateType.MAJOR,
+      point,
+    );
     this._replaceEditToView();
   }
 
@@ -103,6 +118,8 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._handlePointUpdate(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._point,

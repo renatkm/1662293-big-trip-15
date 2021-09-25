@@ -30,4 +30,10 @@ export const getHumanizedDiffTime = (datetime1, datetime2) =>{
   return  `${days ? `${days}D ` : ''}${hours ? `${hours}H ` : ''}${minutes ? `${minutes}M` : ''}`.trim();
 };
 
-export const getDiffTime = (arrivalTime, departureTime) => dayjs(departureTime).diff(dayjs(arrivalTime));
+export const getDiffTime = (arrivalTime, departureTime) => {
+  const now = dayjs();
+  const date2 =  departureTime ? dayjs(departureTime) : now;
+  const date1 = arrivalTime ? dayjs(arrivalTime) : now;
+
+  return date2.diff(date1);
+};
