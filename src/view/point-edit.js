@@ -224,15 +224,19 @@ export default class PointEdit extends SmartView {
   _destinationChangeHandler(evt) {
     evt.preventDefault();
 
+    const newCityName = evt.target.value;
+    let newDestination = null;
+    if (!newCityName) {
     // Поиск выбранного города из справочника.
-    let newDestination = DESTINATIONS.find(({name}) => name === evt.target.value);
-    // Если не находим, то создаем новый на лету.
-    if (!newDestination) {
-      newDestination = {
-        name: evt.target.value,
-        description: generateText(),
-        photos: getPhotos(),
-      };
+      newDestination = DESTINATIONS.find(({name}) => name === newCityName);
+      // Если не находим, то создаем новый на лету.
+      if (!newDestination) {
+        newDestination = {
+          name: newCityName,
+          description: generateText(),
+          photos: getPhotos(),
+        };
+      }
     }
 
     this.updateData(
