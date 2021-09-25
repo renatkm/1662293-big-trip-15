@@ -1,5 +1,4 @@
 import SiteMenuView from './view/site-menu.js';
-import FilterView from './view/filter.js';
 import RoutePresenter from './presenter/route.js';
 import FilterPresenter from './presenter/filter.js';
 import PointsModel from './model/Points.js';

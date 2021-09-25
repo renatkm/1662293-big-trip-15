@@ -44,7 +44,6 @@ export default class Route {
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
-    console.log('filterType', filterType);
     const points = this._pointsModel.getPoints();
     const filteredPoints = filter[filterType](points);
 
@@ -109,7 +108,6 @@ export default class Route {
     this._pointCollection.forEach((presenter) => presenter.delete());
     this._pointCollection.clear();
 
-    console.log('sortComponent is removed');
     remove(this._sortComponent);
     remove(this._noPointComponent);
 
@@ -145,13 +143,12 @@ export default class Route {
 
   _renderSort() {
     if (this._sortComponent !== null) {
-      console.log('sortComponent existed');
       this._sortComponent = null;
     }
 
     this._sortComponent = new SortingView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-    console.log('sortComponent render');
+
     render(this._routeComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
