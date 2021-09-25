@@ -28,3 +28,8 @@ render(siteHeaderElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
 routePresenter.init();
 filterPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  routePresenter.createPoint();
+});

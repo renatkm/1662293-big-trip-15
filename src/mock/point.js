@@ -70,10 +70,19 @@ export const  generatePoint = () => {
     type : pointType,
     arrivalTime : arrivalTime,
     departureTime : departureTime,
-    description: generateText(),
     basePrice: getRandomInteger(0, 300),
     isFavorite: false,
     offers: getAnyOffers(pointType),
-    photos: getPhotos(),
   };
+};
+
+export const EMPTY_POINT = {
+  id : nanoid(),
+  destination : 'Geneva',
+  type: 'Restaurant',
+  arrivalTime: dayjs().toDate(),
+  departureTime: null,
+  basePrice: null,
+  isFavorite: false,
+  offers: [],
 };

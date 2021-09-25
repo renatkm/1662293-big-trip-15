@@ -2,6 +2,7 @@ import RouteView from '../view/route.js';
 import NoPointView from '../view/no-point.js';
 import PointListView from '../view/point-list.js';
 import PointPresenter from './point.js';
+import PointNewPresenter from './point-new.js';
 import SortingView from '../view/sorting.js';
 import TripInfoView from '../view/tripInfo.js';
 import TripCostView from '../view/tripCost.js';
@@ -37,11 +38,19 @@ export default class Route {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._pointNewPresenter = new PointNewPresenter(this._routeComponent, this._handleViewAction);
   }
 
   init() {
     // Инициализация точками маршрута
     this._renderRoute();
+  }
+
+  createPoint() {
+    this._currentSortType = SortTypes.DAY.name;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
   }
 
   _getPoints() {
@@ -92,6 +101,7 @@ export default class Route {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.delete();
     this._pointCollection.forEach((presenter) => presenter.resetView());
   }
 
@@ -107,6 +117,7 @@ export default class Route {
   }
 
   _clearRoute(resetSortType = false){
+    this._pointNewPresenter.delete();
     this._pointCollection.forEach((presenter) => presenter.delete());
     this._pointCollection.clear();
 

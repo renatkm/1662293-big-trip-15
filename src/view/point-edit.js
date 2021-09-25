@@ -3,6 +3,7 @@ import {DESTINATIONS, POINT_TYPES} from '../const.js';
 import {getHumanizedDateTime} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrDefault} from '../utils/point.js';
 import {formValidation} from '../utils/form-validation.js';
+import {EMPTY_POINT} from '../mock/point.js';
 
 const createPointEditTypesTemplate = (type) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -162,7 +163,7 @@ const createPointEditTemplate = (data) => {
 };
 
 export default class PointEdit extends SmartView {
-  constructor(point) {
+  constructor(point = EMPTY_POINT) {
     super();
     this._data = PointEdit.parsePointToData(point);
 

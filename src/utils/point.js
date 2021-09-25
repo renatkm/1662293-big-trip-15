@@ -3,6 +3,10 @@ import {getDiffTime} from './common.js';
 import {generateText, getPhotos} from '../mock/point.js';
 
 export const getOfferListByPointType = (pointType) =>  {
+  if (!pointType) {
+    return [];
+  }
+
   const filteredOffers = OFFERS.find((offer) => offer.type === pointType);
 
   return  filteredOffers ? filteredOffers.offers : [];
