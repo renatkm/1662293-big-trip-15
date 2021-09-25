@@ -9,7 +9,7 @@ import TripSummaryView from '../view/tripSummary.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
 import {comparePointDate, comparePointLength, comparePointBasePrice} from '../utils/point.js';
-import {SortTypes, UpdateType, UserAction} from '../const.js';
+import {SortTypes, UpdateType, UserAction, FilterType} from '../const.js';
 
 export default class Route {
   constructor(routeContainer, pointsModel, filterModel) {
@@ -19,11 +19,13 @@ export default class Route {
     this._filterModel = filterModel;
     this._pointCollection = new Map();
     this._currentSortType = SortTypes.DAY.name;
+    this._filterType = FilterType.EVERYTHING;
 
     this._routeComponent = new RouteView();
     this._sortComponent = null;
+    this._noPointComponent = null;
+
     this._pointsComponent = new PointListView();
-    this._noPointComponent = new NoPointView();
     this._tripInfoComponent = new TripInfoView();
     this._tripCostComponent = new TripCostView();
     this._tripSummaryComponent = new TripSummaryView();
@@ -43,9 +45,9 @@ export default class Route {
   }
 
   _getPoints() {
-    const filterType = this._filterModel.getFilter();
+    this._filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this._filterType](points);
 
     switch(this._currentSortType) {
       case SortTypes.PRICE.name:
@@ -173,6 +175,7 @@ export default class Route {
 
   _renderNoPoints() {
     // Отрисовка заглушки
+    this._noPointComponent = new NoPointView(this._filterType);
     render(this._routeComponent, this._noPointComponent, RenderPosition.BEFOREEND);
   }
 }

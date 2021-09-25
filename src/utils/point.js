@@ -8,14 +8,14 @@ export const getOfferListByPointType = (pointType) =>  {
   return  filteredOffers ? filteredOffers.offers : [];
 };
 
-export const getDestinationOrDefault = (cityName) =>{
+export const getDestinationOrDefault = (cityName, isUnknownCityAllowed) =>{
   let newDestination = DESTINATIONS.find(({name}) => name === cityName);
   if (!cityName) {
     cityName = '';
   }
 
   // Если не находим, то создаем новый на лету.
-  if (!cityName || !newDestination) {
+  if (isUnknownCityAllowed && (!cityName || !newDestination)) {
     newDestination = {
       name: cityName,
       description: generateText(),

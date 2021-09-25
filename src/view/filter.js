@@ -9,8 +9,8 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
         class="trip-filters__filter-input  visually-hidden" 
         type="radio" name="trip-filter" 
         value="${type}" 
-        ${type === currentFilterType ? 'checked' : ''} 
-        ${count === 0 ? 'disabled' : ''}>
+        ${type === currentFilterType ? 'checked' : ''}
+        >
       <label class="trip-filters__filter-label" for="filter-${type}">
         ${name} <span class="filter__${name}-count">${count}</span>
       </label>

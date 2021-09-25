@@ -2,6 +2,7 @@ import SmartView from './smart.js';
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
 import {getHumanizedDateTime} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrDefault} from '../utils/point.js';
+import {formValidation} from '../utils/form-validation.js';
 
 const createPointEditTypesTemplate = (type) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -28,7 +29,8 @@ const createPointEditDestinationTemplate = (destination) => {
     event__input--destination" 
     id="event-destination-1" type="text" 
     name="event-destination" 
-    value="${name}" list="destination-list-1">
+    value="${name}" required 
+    list="destination-list-1">
     <datalist id="destination-list-1">
     ${DESTINATIONS.map((city) => `<option value="${city.name}"></option>`).join('')}
   </datalist>`;
@@ -142,7 +144,7 @@ const createPointEditTemplate = (data) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" required value="${basePrice}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -232,7 +234,7 @@ export default class PointEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const  newDestination = getDestinationOrDefault(evt.target.value);
+    const newDestination = getDestinationOrDefault(evt.target.value, true);
 
     this.updateData(
       {
@@ -263,7 +265,11 @@ export default class PointEdit extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
+    formValidation(evt);
+
+    if (evt.target.checkValidity()){
+      this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
+    }
   }
 
   _formDeleteClickHandler(evt) {
