@@ -210,6 +210,7 @@ export default class PointEdit extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _pointClickHandler(evt) {
