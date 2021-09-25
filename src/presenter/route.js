@@ -83,7 +83,7 @@ export default class Route {
         break;
       case UpdateType.MAJOR:
         //обновить проект полностью
-        this._clearRoute({resetSortType: true});
+        this._clearRoute(true);
         this._renderRoute();
         break;
     }
@@ -104,7 +104,7 @@ export default class Route {
     this._renderPoints(this._getPoints());
   }
 
-  _clearRoute({resetSortType = false}){
+  _clearRoute(resetSortType = false){
     this._pointCollection.forEach((presenter) => presenter.delete());
     this._pointCollection.clear();
 

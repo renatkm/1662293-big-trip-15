@@ -1,8 +1,7 @@
 import SmartView from './smart.js';
 import {DESTINATIONS, POINT_TYPES} from '../const.js';
 import {getHumanizedDateTime} from '../utils/common.js';
-import {getOfferListByPointType} from '../utils/point.js';
-import {generateText, getPhotos} from '../mock/point.js';
+import {getOfferListByPointType, getDestinationOrDefault} from '../utils/point.js';
 
 const createPointEditTypesTemplate = (type) =>POINT_TYPES.map((pointType) => {
   const className = pointType.toLowerCase();
@@ -232,21 +231,7 @@ export default class PointEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-
-    const newCityName = evt.target.value;
-    let newDestination = null;
-    if (!newCityName) {
-    // Поиск выбранного города из справочника.
-      newDestination = DESTINATIONS.find(({name}) => name === newCityName);
-      // Если не находим, то создаем новый на лету.
-      if (!newDestination) {
-        newDestination = {
-          name: newCityName,
-          description: generateText(),
-          photos: getPhotos(),
-        };
-      }
-    }
+    const  newDestination = getDestinationOrDefault(evt.target.value);
 
     this.updateData(
       {

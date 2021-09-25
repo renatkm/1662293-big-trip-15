@@ -1,10 +1,29 @@
-import {OFFERS} from '../const.js';
+import {OFFERS, DESTINATIONS} from '../const.js';
 import {getDiffTime} from './common.js';
+import {generateText, getPhotos} from '../mock/point.js';
 
 export const getOfferListByPointType = (pointType) =>  {
   const filteredOffers = OFFERS.find((offer) => offer.type === pointType);
 
   return  filteredOffers ? filteredOffers.offers : [];
+};
+
+export const getDestinationOrDefault = (cityName) =>{
+  let newDestination = DESTINATIONS.find(({name}) => name === cityName);
+  if (!cityName) {
+    cityName = '';
+  }
+
+  // Если не находим, то создаем новый на лету.
+  if (!cityName || !newDestination) {
+    newDestination = {
+      name: cityName,
+      description: generateText(),
+      photos: getPhotos(),
+    };
+  }
+
+  return newDestination;
 };
 
 export const updatePoints = (points, point) => {
