@@ -13,11 +13,13 @@ import {comparePointDate, comparePointLength, comparePointBasePrice} from '../ut
 import {SortTypes, UpdateType, UserAction, FilterType} from '../const.js';
 
 export default class Route {
-  constructor(routeContainer, pointsModel, filterModel) {
+  constructor(routeContainer, pointsModel, filterModel, offersModel, destinationsModel) {
     //Инициализация контейнера
     this._routeContainer = routeContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
     this._pointCollection = new Map();
     this._currentSortType = SortTypes.DAY.name;
     this._filterType = FilterType.EVERYTHING;
