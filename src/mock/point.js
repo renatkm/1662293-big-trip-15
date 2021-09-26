@@ -68,12 +68,21 @@ export const  generatePoint = () => {
     id: nanoid(),
     destination: getRandomDestination(),
     type : pointType,
-    arrivalTime : arrivalTime,
-    departureTime : departureTime,
-    description: generateText(),
+    arrivalTime : arrivalTime.toDate(),
+    departureTime : departureTime.toDate(),
     basePrice: getRandomInteger(0, 300),
     isFavorite: false,
     offers: getAnyOffers(pointType),
-    photos: getPhotos(),
   };
+};
+
+export const EMPTY_POINT = {
+  id : nanoid(),
+  destination : 'Geneva',
+  type: 'Restaurant',
+  arrivalTime: dayjs().startOf('day').add(1, 'day').toDate(),
+  departureTime: dayjs().startOf('day').add(2, 'day').toDate(),
+  basePrice: null,
+  isFavorite: false,
+  offers: [],
 };
