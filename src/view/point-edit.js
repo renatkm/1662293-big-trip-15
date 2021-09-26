@@ -243,8 +243,6 @@ export default class PointEdit extends SmartView {
     this.updateData(
       PointEdit.parsePointToData(point),
     );
-
-    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   restoreHandlers() {
@@ -273,7 +271,8 @@ export default class PointEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const newDestination = getDestinationOrDefault(evt.target.value, true);
+    const newDestination = getDestinationOrDefault(evt.target.value, false);
+
     if (!newDestination){
       evt.target.setCustomValidity('Please select an other city');
       evt.target.reportValidity();
