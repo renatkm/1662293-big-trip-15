@@ -110,6 +110,7 @@ export default class Route {
       return;
     }
 
+    remove(this._sortComponent);
     this._currentSortType = sortType;
     this._renderSort();
     this._clearPointList();
