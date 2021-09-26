@@ -37,3 +37,9 @@ export const getDiffTime = (arrivalTime, departureTime) => {
 
   return date2.diff(date1);
 };
+
+export const getRoundDateTime = (datetime, minuteInterval) => {
+  const  minutes = Math.floor(dayjs(datetime).minutes() / minuteInterval)*minuteInterval;
+
+  return dayjs(datetime).startOf('hour').add(minutes, 'minute');
+};

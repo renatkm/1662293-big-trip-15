@@ -39,7 +39,7 @@ export default class Route {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._pointNewPresenter = new PointNewPresenter(this._routeComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._pointsComponent, this._handleViewAction);
   }
 
   init() {
@@ -47,10 +47,10 @@ export default class Route {
     this._renderRoute();
   }
 
-  createPoint() {
+  createPoint(onCloseCallback) {
     this._currentSortType = SortTypes.DAY.name;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init();
+    this._pointNewPresenter.init(onCloseCallback);
   }
 
   _getPoints() {

@@ -11,7 +11,11 @@ const siteMenuElement = document.querySelector('.trip-main__trip-controls');
 const siteHeaderElement = siteMenuElement.querySelector('.trip-controls__navigation');
 const filterElement = siteMenuElement.querySelector('.trip-controls__filters');
 const tripElement = document.querySelector('.page-main > .page-body__container');
+const newPointButtonElement = document.querySelector('.trip-main__event-add-btn');
 
+const onClosePointNewFormCallback = () => {
+  newPointButtonElement.disabled = false;
+};
 
 const TRIP_POINTS_COUNT = getRandomInteger(0, 15);
 
@@ -29,7 +33,8 @@ render(siteHeaderElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 routePresenter.init();
 filterPresenter.init();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+newPointButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();
-  routePresenter.createPoint();
+  newPointButtonElement.disabled = true;
+  routePresenter.createPoint(onClosePointNewFormCallback);
 });
