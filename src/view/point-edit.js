@@ -7,56 +7,57 @@ import {EMPTY_POINT} from '../mock/point.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createPointEditTypesTemplate = (pointTypeName, allOffers) =>allOffers.map((item) => {
+const createPointEditTypesTemplate = (pointTypeName, allOffers, id) =>allOffers.map((item) => {
   const className = item.type.toLowerCase();
   const isChecked = item.type === pointTypeName;
 
   return `<div class="event__type-item">
     <input 
-      id="event-type-${className}-1" 
+      id="event-type-${className}-${id}" 
       class="event__type-input visually-hidden" 
       type="radio" name="event-type" 
       data-type="${item.type}" 
       value="${className}" ${isChecked ? 'checked' : ''}>
-    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-1">${getPascalName(item.type)}</label>
+    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-${id}">${getPascalName(item.type)}</label>
     </div>`;
 }).join('');
 
-const createDestinationTemplate = (destination, availableDestinations = []) => {
+const createDestinationTemplate = (destination, availableDestinations = [], id) => {
   const name = destination? destination.name: '';
 
   return `<input 
     class="event__input  
     event__input--destination" 
-    id="event-destination-1" type="text" 
+    id="event-destination-${id}" type="text" 
     name="event-destination" 
     value="${name}" required 
-    list="destination-list-1">
-    <datalist id="destination-list-1">
+    list="destination-list-${id}">
+    <datalist id="destination-list-${id}">
     ${availableDestinations.map((city) => `<option value="${city.name}"></option>`).join('')}
   </datalist>`;
 };
 
 const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
 
-const isOfferChecked = (offer, checkedOffers) => checkedOffers ? checkedOffers.some((checkedOffer) => checkedOffer.title === offer.title) : false;
+const isOfferChecked = (offer, checkedOffers) => checkedOffers ? checkedOffers.some((checkedOffer) => checkedOffer.title.toLowerCase() === offer.title.toLowerCase()) : false;
 
-const createPointEditOffersTemplate = (availableOffers, checkedOffers) => (
+const createPointEditOffersTemplate = (availableOffers, checkedOffers, id) => (
   `
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-    ${availableOffers.map((offer, index) => {
+    ${availableOffers.map((offer) => {
     const isChecked = isOfferChecked(offer, checkedOffers) ? 'checked' : '';
     const className = generateClassName(offer.title);
     return `
       <div class="event__offer-selector">
           <input 
             class="event__offer-checkbox visually-hidden" 
-            id="event-offer-${className}-${index}" type="checkbox" 
+            data-title="${offer.title.toLowerCase()}" data-price="${offer.price}" 
+            id="event-offer-${className}-${id}" type="checkbox" 
             data-offer="${offer.title}" 
             name="event-offer-${className}" ${isChecked}>
-          <label class="event__offer-label" for="event-offer-${className}-${index}">
+          <label class="event__offer-label" for="event-offer-${className}-${id}">
            <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
@@ -100,27 +101,24 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
     basePrice,
     offers,
   } = data;
-  console.log('createPointEditTemplate allOffers', allOffers);
-  console.log('createPointEditTemplate allDestinations', allDestinations);
-  console.log('createPointEditTemplate offers', offers);
-  console.log('createPointEditTemplate isNewPoint',isNewPoint);
 
   const availableOffers = getOfferListByPointType(data.type, allOffers);
-  const pointTypesTemplate = createPointEditTypesTemplate(type, allOffers);
-  const offersTemplate = allOffers.length ? createPointEditOffersTemplate(availableOffers, offers) : '';
-  const destinationsTemplate = createDestinationTemplate(destination, allDestinations);
+  const pointTypesTemplate = createPointEditTypesTemplate(type, allOffers, id);
+  const offersTemplate = availableOffers.length ? createPointEditOffersTemplate(availableOffers, offers, id) : '';
+  const destinationsTemplate = createDestinationTemplate(destination, allDestinations, id);
   const descriptionTemplate = createPointEditDescriptionTemplate(destination);
   const className = type.toLowerCase();
+  const resetButtonName = isNewPoint? 'Cancel' : 'Delete';
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
-        <label class="event__type  event__type-btn" for="event-type-toggle-1">
+        <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${className}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
@@ -131,30 +129,30 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
       </div>
 
       <div class="event__field-group  event__field-group--destination">
-        <label class="event__label  event__type-output" for="event-destination-1">
+        <label class="event__label  event__type-output" for="event-destination-${id}">
           ${type}
         </label>
         ${destinationsTemplate}
       </div>
 
       <div class="event__field-group  event__field-group--time">
-        <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getHumanizedDateTime(arrivalTime)}">
+        <label class="visually-hidden" for="event-start-time-${id}">From</label>
+        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getHumanizedDateTime(arrivalTime)}">
         &mdash;
-        <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getHumanizedDateTime(departureTime)}">
+        <label class="visually-hidden" for="event-end-time-${id}">To</label>
+        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getHumanizedDateTime(departureTime)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
-        <label class="event__label" for="event-price-1">
+        <label class="event__label" for="event-price-${id}">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" required value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" required value="${basePrice}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__reset-btn" type="reset">${resetButtonName}</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -172,8 +170,6 @@ export default class PointEdit extends SmartView {
     super();
     const {point = EMPTY_POINT, offers, destinations} = data;
 
-    console.log('PointEdit View allOffers', offers);
-    console.log('PointEdit View allDestinations', destinations);
     this._data = PointEdit.parsePointToData(point);
     this._allOffers = offers;
     this._allDestinations = destinations;
@@ -210,29 +206,9 @@ export default class PointEdit extends SmartView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
   }
 
-  setOfferClickHandler(callback) {
-    this._callback.offerClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
-  }
-
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
-  }
-
-  setBasePriceClickHandler(callback) {
-    this._callback.pointClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._basePriceClickHandler);
-  }
-
-  setArrivalTimeClickHandler(callback) {
-    this._callback.pointClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._arrivalTimeChangeHandler);
-  }
-
-  setDepartureTimeClickHandler(callback) {
-    this._callback.pointClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._departureTimeChangeHandler);
   }
 
   removeElement() {
@@ -281,8 +257,6 @@ export default class PointEdit extends SmartView {
   _destinationChangeHandler(evt) {
     evt.preventDefault();
     const newDestination = getDestinationOrNull(evt.target.value, this._allDestinations);
-    console.log('all destinations', this._allDestinations);
-    console.log('checked city', evt.target.value);
 
     if (!newDestination){
       evt.target.setCustomValidity('Please select an other city');
@@ -403,11 +377,11 @@ export default class PointEdit extends SmartView {
     this.getElement().querySelector('.event__type-list').addEventListener('click', this._typeChangeHandler);
     this.getElement().querySelector('.event__input').addEventListener('change', this._destinationChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._basePriceChangeHandler);
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
+    this.getElement().querySelector('.event__section').addEventListener('change', this._offerClickHandler);
 
-    const offersElement = this.getElement().querySelector('.event__available-offers');
-    if (offersElement){
-      offersElement.addEventListener('click', this._offerClickHandler);
+    const closeEditFormElement = this.getElement().querySelector('.event__rollup-btn');
+    if (closeEditFormElement){
+      closeEditFormElement.addEventListener('click', this._pointClickHandler);
     }
   }
 

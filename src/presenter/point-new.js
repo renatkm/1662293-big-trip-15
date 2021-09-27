@@ -22,7 +22,6 @@ export default class PointNew {
     }
 
     this._onCloseCallback = onCloseCallback;
-    console.log('PointNew.init', offers, destinations);
     this._pointEditComponent = new PointEditView({offers, destinations});
 
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);

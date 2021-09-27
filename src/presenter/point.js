@@ -33,7 +33,6 @@ export default class Point {
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(point);
-    console.log('Point.init', offers, destinations);
     this._pointEditComponent = new PointEditView({point, offers, destinations});
 
     this._pointComponent.setPointClickHandler(this._handleEditClick);

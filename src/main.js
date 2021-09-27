@@ -37,14 +37,12 @@ Promise.all([
 ])
   .then((values) => {
     const [destinations, offers, points] = values;
-    console.log('data loaded');
     destinationsModel.setDestinations(UpdateType.INIT, destinations);
     offersModel.setOffers(UpdateType.INIT, offers);
     pointsModel.setPoints(UpdateType.INIT, points);
     newPointButtonElement.disabled = false;
   })
-  .catch((error) => {
-    console.log('error API', error);
+  .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
   });
 

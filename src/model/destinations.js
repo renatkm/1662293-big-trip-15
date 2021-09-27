@@ -8,7 +8,7 @@ export default class Destination extends AbstractObserver {
 
   setDestinations(updateType, destinations) {
     this._destinations = destinations.slice();
-    console.log('set destinations');
+
     this._notify(updateType, this._destinations);
   }
 

@@ -3,7 +3,7 @@ const destinationValidation = (evt) => {
 
   let destinationFound = false;
   const datalist = destinationControl.list;
-  console.log('datalist', datalist);
+
   for (let j = 0; j < datalist.options.length; j++) {
     if (destinationControl.value === datalist.options[j].value) {
       destinationFound = true;

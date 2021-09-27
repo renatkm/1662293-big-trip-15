@@ -59,7 +59,6 @@ export default class Route {
 
     this._currentSortType = SortTypes.DAY.name;
     this._filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
-    console.log('Route.createPoint', this._offers, this._destinations);
     this._pointNewPresenter.init(this._offers, this._destinations, onCloseCallback);
   }
 
@@ -89,13 +88,19 @@ export default class Route {
   _handleViewAction(actionType, updateType, update) {
     switch(actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._api.addPoint(update).then((response) => {
+          this._pointsModel.addPoint(updateType, response);
+        });
         break;
       case UserAction.DELETE_POINT:
-        this._pointsModel.deletePoint(updateType, update);
+        this._api.deletePoint(update).then(() => {
+          this._pointsModel.deletePoint(updateType, update);
+        });
         break;
     }
   }
