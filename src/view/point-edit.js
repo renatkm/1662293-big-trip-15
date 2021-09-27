@@ -106,7 +106,7 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
   console.log('createPointEditTemplate isNewPoint',isNewPoint);
 
   const availableOffers = getOfferListByPointType(data.type, allOffers);
-  const pointTypesTemplate = createPointEditTypesTemplate(type, availableOffers);
+  const pointTypesTemplate = createPointEditTypesTemplate(type, allOffers);
   const offersTemplate = allOffers.length ? createPointEditOffersTemplate(availableOffers, offers) : '';
   const destinationsTemplate = createDestinationTemplate(destination, allDestinations);
   const descriptionTemplate = createPointEditDescriptionTemplate(destination);
