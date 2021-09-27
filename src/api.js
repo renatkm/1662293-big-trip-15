@@ -8,8 +8,8 @@ const Method = {
 };
 
 export default class Api {
-  constructor(endPoint, authorization) {
-    this._endPoint = endPoint;
+  constructor(endpoint, authorization) {
+    this._endpoint = endpoint;
     this._authorization = authorization;
   }
 
@@ -67,7 +67,7 @@ export default class Api {
     headers.append('Authorization', this._authorization);
 
     return fetch(
-      `${this._endPoint}/${url}`,
+      `${this._endpoint}/${url}`,
       {method, body, headers},
     )
       .then(Api.checkStatus)

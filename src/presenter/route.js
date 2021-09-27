@@ -36,7 +36,7 @@ export default class Route {
     this._tripInfoComponent = new TripInfoView();
     this._tripCostComponent = new TripCostView();
     this._tripSummaryComponent = new TripSummaryView();
-    this._loadingView = new LoadingView();
+    this._loadingComponent = new LoadingView();
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);

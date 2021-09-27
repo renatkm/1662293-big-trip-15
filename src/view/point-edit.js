@@ -247,7 +247,6 @@ export default class PointEdit extends SmartView {
       this.updateData(
         {
           type: evt.target.dataset.type,
-          availableOffers: getOfferListByPointType(evt.target.dataset.type),
           offers: [],
         },
       );
