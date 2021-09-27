@@ -2,7 +2,7 @@ const destinationValidation = (evt) => {
   const destinationControl = evt.target.querySelector('.event__input--destination');
 
   let destinationFound = false;
-  const datalist = evt.target.list;
+  const datalist = destinationControl.list;
   console.log('datalist', datalist);
   for (let j = 0; j < datalist.options.length; j++) {
     if (destinationControl.value === datalist.options[j].value) {
