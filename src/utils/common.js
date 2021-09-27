@@ -43,3 +43,8 @@ export const getRoundDateTime = (datetime, minuteInterval) => {
 
   return dayjs(datetime).startOf('hour').add(minutes, 'minute');
 };
+
+export const getPascalName = (string) => string
+  .split(/\s+/)
+  .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+  .join(' ');

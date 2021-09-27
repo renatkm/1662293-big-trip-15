@@ -26,14 +26,15 @@ export default class Point {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(point) {
+  init(point, offers, destinations) {
     this._point = point;
 
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(point);
-    this._pointEditComponent = new PointEditView(point);
+    console.log('Point.init', offers, destinations);
+    this._pointEditComponent = new PointEditView({point, offers, destinations});
 
     this._pointComponent.setPointClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -99,7 +100,7 @@ export default class Point {
   _handleDeleteClick(point) {
     this._handlePointUpdate(
       UserAction.DELETE_POINT,
-      UpdateType.MAJOR,
+      UpdateType.MINOR,
       point,
     );
   }
@@ -107,7 +108,7 @@ export default class Point {
   _handleFormSubmit(point) {
     this._handlePointUpdate(
       UserAction.UPDATE_POINT,
-      UpdateType.MAJOR,
+      UpdateType.MINOR,
       point,
     );
     this._replaceEditToView();

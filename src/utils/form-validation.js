@@ -1,10 +1,17 @@
-import he from 'he';
-import {getDestinationOrDefault} from '../utils/point.js';
-
 const destinationValidation = (evt) => {
   const destinationControl = evt.target.querySelector('.event__input--destination');
 
-  if (!getDestinationOrDefault(he.encode(destinationControl.value), false)){
+  let destinationFound = false;
+  const datalist = evt.target.list;
+  console.log('datalist', datalist);
+  for (let j = 0; j < datalist.options.length; j++) {
+    if (destinationControl.value === datalist.options[j].value) {
+      destinationFound = true;
+      break;
+    }
+  }
+
+  if (!destinationFound){
     destinationControl.setCustomValidity(`Sorry, there is no information about ${destinationControl.value}`);
   }
   else {

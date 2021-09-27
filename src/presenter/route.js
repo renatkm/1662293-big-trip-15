@@ -11,18 +11,22 @@ import {render, RenderPosition, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
 import {comparePointDate, comparePointLength, comparePointBasePrice} from '../utils/point.js';
 import {SortTypes, UpdateType, UserAction, FilterType} from '../const.js';
+import LoadingView from '../view/loading.js';
 
 export default class Route {
-  constructor(routeContainer, pointsModel, filterModel, offersModel, destinationsModel) {
+  constructor(routeContainer, pointsModel, filterModel, offersModel, destinationsModel, api) {
     //Инициализация контейнера
     this._routeContainer = routeContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this._api = api;
+
     this._pointCollection = new Map();
     this._currentSortType = SortTypes.DAY.name;
     this._filterType = FilterType.EVERYTHING;
+    this._isLoading = true;
 
     this._routeComponent = new RouteView();
     this._sortComponent = null;
@@ -32,27 +36,39 @@ export default class Route {
     this._tripInfoComponent = new TripInfoView();
     this._tripCostComponent = new TripCostView();
     this._tripSummaryComponent = new TripSummaryView();
+    this._loadingView = new LoadingView();
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
     this._pointNewPresenter = new PointNewPresenter(this._pointsComponent, this._handleViewAction);
   }
 
   init() {
-    // Инициализация точками маршрута
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderRoute();
   }
 
   createPoint(onCloseCallback) {
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
+
     this._currentSortType = SortTypes.DAY.name;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init(onCloseCallback);
+    this._filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
+    console.log('Route.createPoint', this._offers, this._destinations);
+    this._pointNewPresenter.init(this._offers, this._destinations, onCloseCallback);
+  }
+
+  delete() {
+    this._clearRoute({resetSortType: true});
+    remove(this._pointsComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _getPoints() {
@@ -89,14 +105,22 @@ export default class Route {
       case UpdateType.PATCH:
         this._pointCollection.get(data.id).init(data);
         break;
+
       case UpdateType.MINOR:
         this._clearRoute();
         this._renderRoute();
         //обновить часть проекта
         break;
+
       case UpdateType.MAJOR:
         //обновить проект полностью
         this._clearRoute(true);
+        this._renderRoute();
+        break;
+
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderRoute();
         break;
     }
@@ -115,8 +139,8 @@ export default class Route {
     remove(this._sortComponent);
     this._currentSortType = sortType;
     this._renderSort();
-    this._clearPointList();
-    this._renderPoints(this._getPoints());
+    this._clearRoute();
+    this._renderRoute();
   }
 
   _clearRoute(resetSortType = false){
@@ -126,6 +150,8 @@ export default class Route {
 
     remove(this._sortComponent);
     remove(this._noPointComponent);
+    remove(this._loadingComponent);
+    remove(this._pointsComponent);
 
     if (resetSortType){
       this._currentSortType = SortTypes.DAY;
@@ -133,8 +159,14 @@ export default class Route {
   }
 
   _renderRoute() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     render(this._routeContainer, this._routeComponent, RenderPosition.BEFOREEND);
     render(this._routeComponent, this._pointsComponent, RenderPosition.BEFOREEND);
+
     const points = this._getPoints();
     const pointsNumber = points.length;
 
@@ -145,7 +177,7 @@ export default class Route {
 
     this._renderInfo();
     this._renderSort();
-    this._renderPoints(points.slice());
+    this._renderPointsSection();
   }
 
   _renderInfo() {
@@ -169,17 +201,26 @@ export default class Route {
   }
 
   _renderPoint(point) {
-    //Создание и редактирование точки маршрута.
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
+
     const pointPresenter = new PointPresenter(this._pointsComponent, this._handleViewAction, this._handleModeChange);
-    pointPresenter.init(point);
+    pointPresenter.init(point, this._offers, this._destinations);
     this._pointCollection.set(point.id, pointPresenter);
   }
 
   _renderPoints(points) {
-    // отрисовка всех точек маршрута.
-    render(this._routeComponent,  this._pointsComponent, RenderPosition.BEFOREEND);
-
     points.forEach((point) =>  this._renderPoint(point));
+  }
+
+  _renderPointsSection() {
+    render(this._routeComponent, this._pointsComponent, RenderPosition.BEFOREEND);
+    const points = this._getPoints();
+    this._renderPoints(points);
+  }
+
+  _renderLoading() {
+    render(this._routeComponent, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   _clearPointList() {

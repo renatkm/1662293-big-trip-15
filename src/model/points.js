@@ -8,8 +8,8 @@ export default class Points extends AbstractObserver {
 
   setPoints(updateType, points){
     this._points = points.slice();
-
-    this._notify(updateType);
+    console.log('set points');
+    this._notify(updateType, this._points);
   }
 
   getPoints(){

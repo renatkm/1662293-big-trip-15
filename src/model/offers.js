@@ -7,11 +7,12 @@ export default class Offers extends AbstractObserver {
   }
 
   setOffers(updateType, offers){
-    this._points = offers.slice();
-    this._notify(updateType);
+    this._offers = offers.slice();
+    console.log('set offers');
+    this._notify(updateType, this._offers);
   }
 
-  getPoints(){
+  getOffers(){
     return this._offers;
   }
 }

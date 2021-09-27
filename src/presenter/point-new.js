@@ -16,13 +16,14 @@ export default class PointNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(onCloseCallback) {
+  init(offers, destinations, onCloseCallback) {
     if (this._pointEditComponent !== null) {
       return;
     }
 
     this._onCloseCallback = onCloseCallback;
-    this._pointEditComponent = new PointEditView();
+    console.log('PointNew.init', offers, destinations);
+    this._pointEditComponent = new PointEditView({offers, destinations});
 
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);

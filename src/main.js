@@ -15,6 +15,7 @@ const filterElement = siteMenuElement.querySelector('.trip-controls__filters');
 const tripElement = document.querySelector('.page-main > .page-body__container');
 const newPointButtonElement = document.querySelector('.trip-main__event-add-btn');
 
+newPointButtonElement.disabled = true;
 const onClosePointNewFormCallback = () => {
   newPointButtonElement.disabled = false;
 };
@@ -29,7 +30,25 @@ const filterModel = new FilterModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
-const routePresenter = new RoutePresenter(tripElement, pointsModel, filterModel, offersModel, destinationsModel);
+Promise.all([
+  api.getDestinations(),
+  api.getOffers(),
+  api.getPoints(),
+])
+  .then((values) => {
+    const [destinations, offers, points] = values;
+    console.log('data loaded');
+    destinationsModel.setDestinations(UpdateType.INIT, destinations);
+    offersModel.setOffers(UpdateType.INIT, offers);
+    pointsModel.setPoints(UpdateType.INIT, points);
+    newPointButtonElement.disabled = false;
+  })
+  .catch((error) => {
+    console.log('error API', error);
+    pointsModel.setPoints(UpdateType.INIT, []);
+  });
+
+const routePresenter = new RoutePresenter(tripElement, pointsModel, filterModel, offersModel, destinationsModel, api);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, pointsModel);
 render(siteHeaderElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
@@ -42,17 +61,3 @@ newPointButtonElement.addEventListener('click', (evt) => {
   routePresenter.createPoint(onClosePointNewFormCallback);
 });
 
-Promise.all([
-  api.getPoints(),
-  api.getOffers(),
-  api.getDestinations(),
-])
-  .then((values) => {
-    const [pointList, offerList, destinationList] = values;
-    pointsModel.setPoints(UpdateType.INIT, pointList);
-    offersModel.setOffers(UpdateType.INIT, offerList);
-    destinationsModel.setDestinations(UpdateType.INIT, destinationList);
-  })
-  .catch(() => {
-    pointsModel.setPoints(UpdateType.INIT, []);
-  });

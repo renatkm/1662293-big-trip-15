@@ -6,10 +6,10 @@ const createOfferListTemplate =(offers) => {
     return '';
   }
 
-  return offers.map(({name, cost}) =>`<li class="event__offer">
-  <span class="event__offer-title">${name}</span>
+  return offers.map(({title, price}) =>`<li class="event__offer">
+  <span class="event__offer-title">${title}</span>
   &plus;&euro;&nbsp;
-  <span class="event__offer-price">${cost}</span>
+  <span class="event__offer-price">${price}</span>
 </li>`).join('');
 };
 
