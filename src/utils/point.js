@@ -18,19 +18,6 @@ export const getDestinationOrNull = (cityName, allDestinations = []) => {
   return allDestinations.find(({name}) => name.toLowerCase() === cityName.toLowerCase());
 };
 
-export const updatePoints = (points, point) => {
-  const index = points.findIndex((item) => item.id===point.id);
-  if (index === -1){
-    return;
-  }
-
-  return [
-    ...points.slice(0, index),
-    point,
-    ...points.slice(index + 1),
-  ];
-};
-
 export const comparePointBasePrice = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
 
 export const comparePointDate = (pointA, pointB) => getDiffTime(pointB.arrivalTime, pointA.arrivalTime);

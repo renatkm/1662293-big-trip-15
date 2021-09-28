@@ -1,7 +1,7 @@
 import RouteView from '../view/route.js';
 import NoPointView from '../view/no-point.js';
 import PointListView from '../view/point-list.js';
-import PointPresenter from './point.js';
+import PointPresenter, {ViewState} from './point.js';
 import PointNewPresenter from './point-new.js';
 import SortingView from '../view/sorting.js';
 import TripInfoView from '../view/tripInfo.js';
@@ -88,19 +88,33 @@ export default class Route {
   _handleViewAction(actionType, updateType, update) {
     switch(actionType) {
       case UserAction.UPDATE_POINT:
+        this._pointCollection.get(update.id).setViewState(ViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
-        });
+        })
+          .catch(() => {
+            this._pointCollection.get(update.id).setViewState(ViewState.ABORTING);
+          });
         break;
+
       case UserAction.ADD_POINT:
+        this._pointNewPresenter.processSaving();
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
-        });
+        })
+          .catch(() => {
+            this._pointNewPresenter.processAborting();
+          });
         break;
+
       case UserAction.DELETE_POINT:
+        this._pointCollection.get(update.id).setViewState(ViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
-        });
+        })
+          .catch(() => {
+            this._pointCollection.get(update.id).setViewState(ViewState.ABORTING);
+          });
         break;
     }
   }
