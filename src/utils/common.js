@@ -3,6 +3,8 @@ import dayjs from 'dayjs';
 const MINUTES_IN_A_DAY_NUMBER = 1440;
 const MINUTES_IN_A_HOUR_NUMBER = 60;
 
+const getTwoDigitsString = (number) => number.toString().padStart(2, '0');
+
 export const getRandomInteger = (a = 0, b = 1) => {
   const lBound = Math.ceil(Math.min(a, b));
   const uBound = Math.floor(Math.max(a, b));
@@ -27,7 +29,7 @@ export const getHumanizedDiffTime = (datetime1, datetime2) => {
   const hours = Math.floor(diff/MINUTES_IN_A_HOUR_NUMBER);
   const minutes = (diff % MINUTES_IN_A_HOUR_NUMBER);
 
-  return  `${days ? `${days}D ` : ''}${hours ? `${hours}H ` : ''}${minutes ? `${minutes}M` : ''}`.trim();
+  return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`.replace('00D 00H', '').replace('00D', '');
 };
 
 export const getDiffTime = (arrivalTime, departureTime) => {
@@ -38,9 +40,9 @@ export const getDiffTime = (arrivalTime, departureTime) => {
   return date2.diff(date1);
 };
 
-export const getPascalName = (string) => string
+export const getCapitalizedFirstLetterText = (string) => string
   .split(/\s+/)
   .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
   .join(' ');
 
-export const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
+export const getLowerCaseText = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();

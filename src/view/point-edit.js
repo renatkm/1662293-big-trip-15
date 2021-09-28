@@ -1,7 +1,7 @@
 import SmartView from './smart.js';
 import flatpickr  from 'flatpickr';
 
-import {getHumanizedDateTime, getPascalName, generateClassName } from '../utils/common.js';
+import {getHumanizedDateTime, getCapitalizedFirstLetterText, getLowerCaseText} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrNull} from '../utils/point.js';
 import {formValidation} from '../utils/form-validation.js';
 
@@ -33,7 +33,7 @@ const createPointEditTypesTemplate = (pointTypeName, allOffers, id, isDisabled) 
       data-type="${className}" 
       value="${className}" ${isChecked ? 'checked' : ''} 
       ${isDisabled ? 'disabled' : ''}>
-    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-${id}">${getPascalName(item.type)}</label>
+    <label class="event__type-label event__type-label--${className}" for="event-type-${className}-${id}">${getCapitalizedFirstLetterText(item.type)}</label>
     </div>`;
 }).join('');
 
@@ -69,7 +69,7 @@ const createPointEditOffersTemplate = (availableOffers, checkedOffers, id, isDis
         <div class="event__available-offers">
     ${availableOffers.map((offer) => {
     const isChecked = isOfferChecked(offer, checkedOffers) ? 'checked' : '';
-    const className = generateClassName(offer.title);
+    const className = getLowerCaseText(offer.title);
     return `
       <div class="event__offer-selector">
           <input 

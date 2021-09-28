@@ -33,7 +33,21 @@ const basePriceValidation = (evt) => {
   baePriceControl.reportValidity();
 };
 
+const pointDatesValidation = (evt) => {
+  const startTimeElement = evt.target.querySelector('[name=event-start-time]');
+  const endTimeElement = evt.target.querySelector('[name=event-end-time]');
+
+  if (startTimeElement.value > endTimeElement.value) {
+    endTimeElement.setCustomValidity('The start of the event can\'t be later then the end of event.');
+  } else {
+    endTimeElement.setCustomValidity('');
+  }
+
+  endTimeElement.reportValidity();
+};
+
 export const formValidation = (evt) => {
   destinationValidation(evt);
   basePriceValidation(evt);
+  pointDatesValidation(evt);
 };

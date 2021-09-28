@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { FilterType } from '../const.js';
+import {FilterType} from '../const.js';
 
 const NoTasksTextType = {
   [FilterType.EVERYTHING]: 'Click «New Event» to create your first point',
