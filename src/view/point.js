@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import {getTimePart, getHumanizedDiffTime, getDatePart, getHumanizedDate} from '../utils/common.js';
 
-const createOfferListTemplate =(offers) => {
+const createOfferListTemplate = (offers) => {
   if (offers === null) {
     return '';
   }

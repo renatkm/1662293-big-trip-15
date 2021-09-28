@@ -48,3 +48,5 @@ export const getPascalName = (string) => string
   .split(/\s+/)
   .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
   .join(' ');
+
+export const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();

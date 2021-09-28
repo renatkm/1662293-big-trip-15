@@ -1,6 +1,6 @@
 import SmartView from './smart.js';
 import flatpickr  from 'flatpickr';
-import {getHumanizedDateTime, getPascalName} from '../utils/common.js';
+import {getHumanizedDateTime, getPascalName, generateClassName } from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrNull} from '../utils/point.js';
 import {formValidation} from '../utils/form-validation.js';
 import {EMPTY_POINT} from '../mock/point.js';
@@ -23,7 +23,7 @@ const createPointEditTypesTemplate = (pointTypeName, allOffers, id) =>allOffers.
 }).join('');
 
 const createDestinationTemplate = (destination, availableDestinations = [], id) => {
-  const name = destination? destination.name: '';
+  const name = destination ? destination.name : '';
 
   return `<input 
     class="event__input  
@@ -36,8 +36,6 @@ const createDestinationTemplate = (destination, availableDestinations = [], id) 
     ${availableDestinations.map((city) => `<option value="${city.name}"></option>`).join('')}
   </datalist>`;
 };
-
-const generateClassName = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
 
 const isOfferChecked = (offer, checkedOffers) => checkedOffers ? checkedOffers.some((checkedOffer) => checkedOffer.title.toLowerCase() === offer.title.toLowerCase()) : false;
 
@@ -70,13 +68,9 @@ const createPointEditOffersTemplate = (availableOffers, checkedOffers, id) => (
 );
 
 const createPointEditDescriptionTemplate = (destination) => {
-  if (!destination){
-    return '';
-  }
-
   const {
-    pictures = [],
-    description = '',
+    pictures,
+    description,
   } = destination;
 
   return `<section class="event__section  event__section--destination">
@@ -106,9 +100,9 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
   const pointTypesTemplate = createPointEditTypesTemplate(type, allOffers, id);
   const offersTemplate = availableOffers.length ? createPointEditOffersTemplate(availableOffers, offers, id) : '';
   const destinationsTemplate = createDestinationTemplate(destination, allDestinations, id);
-  const descriptionTemplate = createPointEditDescriptionTemplate(destination);
+  const descriptionTemplate = destination ? createPointEditDescriptionTemplate(destination) : '';
   const className = type.toLowerCase();
-  const resetButtonName = isNewPoint? 'Cancel' : 'Delete';
+  const resetButtonName = isNewPoint ? 'Cancel' : 'Delete';
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
