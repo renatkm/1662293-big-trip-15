@@ -6,7 +6,7 @@ export const EMPTY_POINT = {
   destination: {
     name: 'Geneva',
     description: '',
-    photos: [],
+    pictures: [],
   },
   type: 'Restaurant',
   arrivalTime: dayjs().startOf('day').add(1, 'day').toDate(),

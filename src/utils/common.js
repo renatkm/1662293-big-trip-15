@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 const MINUTES_IN_A_DAY_NUMBER = 1440;
 const MINUTES_IN_A_HOUR_NUMBER = 60;
 
-export const getRandomInteger = (a = 0, b = 1) =>{
+export const getRandomInteger = (a = 0, b = 1) => {
   const lBound = Math.ceil(Math.min(a, b));
   const uBound = Math.floor(Math.max(a, b));
 
@@ -20,7 +20,7 @@ export const getHumanizedDate = (datetime) => dayjs(getDatePart(datetime)).forma
 
 export const getHumanizedDateTime = (datetime) => dayjs(datetime).format('DD/MM/YY HH:mm');
 
-export const getHumanizedDiffTime = (datetime1, datetime2) =>{
+export const getHumanizedDiffTime = (datetime1, datetime2) => {
   let diff = dayjs(datetime1).diff(dayjs(datetime2), 'minute');
   const days = Math.floor(diff/MINUTES_IN_A_DAY_NUMBER);
   diff = diff % MINUTES_IN_A_DAY_NUMBER;
@@ -36,12 +36,6 @@ export const getDiffTime = (arrivalTime, departureTime) => {
   const date1 = arrivalTime ? dayjs(arrivalTime) : now;
 
   return date2.diff(date1);
-};
-
-export const getRoundDateTime = (datetime, minuteInterval) => {
-  const  minutes = Math.floor(dayjs(datetime).minutes() / minuteInterval)*minuteInterval;
-
-  return dayjs(datetime).startOf('hour').add(minutes, 'minute');
 };
 
 export const getPascalName = (string) => string

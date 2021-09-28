@@ -10,7 +10,7 @@ export const getOfferListByPointType = (pointTypeName, allOffers = []) =>  {
   return  filteredOffers ? filteredOffers.offers : [];
 };
 
-export const getDestinationOrNull = (cityName, allDestinations = []) =>{
+export const getDestinationOrNull = (cityName, allDestinations = []) => {
   if (!cityName) {
     return null;
   }
