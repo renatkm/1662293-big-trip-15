@@ -56,19 +56,21 @@ const filterPresenter = new FilterPresenter(filterElement, filterModel, pointsMo
 
 let statsComponent = null;
 
-const handleSiteMenuClick = (menuItem) => {
+const handleSiteMenuClick = (menuElement) => {
+  const menuItem = menuElement.text;
+  routePresenter.delete();
+  siteMenuComponent.setMenuItem(menuItem);
+
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statsComponent);
-      routePresenter.delete();
       routePresenter.init();
       newPointButtonElement.disabled = false;
       filterPresenter.init();
-      siteMenuComponent.setMenuItem(menuItem);
       break;
+
     case MenuItem.STATS:
       routePresenter.delete();
-      siteMenuComponent.setMenuItem(menuItem);
       newPointButtonElement.disabled = true;
       document.querySelectorAll('.trip-filters__filter-input').forEach((filter) => filter.disabled = true);
       statsComponent = new StatsView(pointsModel.getPoints());

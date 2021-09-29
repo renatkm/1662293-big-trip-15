@@ -20,7 +20,10 @@ export default class SiteMenu extends AbstractView {
   setMenuItem(menuItem) {
     const items = this.getElement().querySelectorAll('.trip-tabs__btn');
     items.forEach((item) => {
-      (item.text === menuItem) ? item.classList.add('trip-tabs__btn--active') : item.classList.remove('trip-tabs__btn--active');
+      item.classList.remove('trip-tabs__btn--active');
+      if (item.text === menuItem) {
+        item.classList.add('trip-tabs__btn--active');
+      }
     });
   }
 
@@ -31,6 +34,6 @@ export default class SiteMenu extends AbstractView {
 
   _menuClickHandler(evt) {
     evt.preventDefault();
-    this._callback.menuClick(evt.target.text);
+    this._callback.menuClick(evt.target);
   }
 }

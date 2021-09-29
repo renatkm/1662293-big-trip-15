@@ -51,5 +51,5 @@ export const MenuItem = {
 export const CanvasType = {
   MONEY: 'money',
   TYPE: 'type',
-  TIME: 'time-spend',
+  TIME_SPEND: 'time-spend',
 };

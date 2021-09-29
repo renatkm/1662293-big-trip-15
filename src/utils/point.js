@@ -1,12 +1,4 @@
-import dayjs from 'dayjs';
-
-export const getDiffTime = (arrivalTime, departureTime) => {
-  const now = dayjs();
-  const date2 =  departureTime ? dayjs(departureTime) : now;
-  const date1 = arrivalTime ? dayjs(arrivalTime) : now;
-
-  return date2.diff(date1);
-};
+import {getDiffTime} from './common.js';
 
 export const getOfferListByPointType = (pointTypeName, allOffers = []) =>  {
   if (!pointTypeName) {

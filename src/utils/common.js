@@ -5,15 +5,6 @@ const NUMBER_MIN_PER_HOUR = 60;
 
 const getTwoDigitsString = (number) => number.toString().padStart(2, '0');
 
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lBound = Math.ceil(Math.min(a, b));
-  const uBound = Math.floor(Math.max(a, b));
-
-  return Math.floor(lBound+ Math.random()*(uBound - lBound+1));
-};
-
-export const getRandomItem = (collection) => collection[getRandomInteger(0, collection.length-1)];
-
 export const getTimePart = (datetime) => dayjs(datetime).format('HH:mm');
 
 export const getDatePart = (datetime) => dayjs(datetime).format('YYYY-MM-DD');
@@ -40,7 +31,15 @@ export const getDurationTime = (duration) => {
   return `${getTwoDigitsString(minutes)}M`;
 };
 
-export const getHumanizedDiffTime = (datetime1, datetime2) => getDurationTime(dayjs(datetime1).diff(dayjs(datetime2)));
+export const getDiffTime = (dateA, dateB) => {
+  const now = dayjs();
+  const date2 =  dateB ? dayjs(dateB) : now;
+  const date1 = dateA ? dayjs(dateA) : now;
+
+  return date2.diff(date1);
+};
+
+export const getHumanizedDiffTime = (dateA, dateB) => getDurationTime(dayjs(dateA).diff(dayjs(dateB)));
 
 export const getCapitalizedFirstLetterText = (string) => string
   .split(/\s+/)
@@ -48,5 +47,3 @@ export const getCapitalizedFirstLetterText = (string) => string
   .join(' ');
 
 export const getLowerCaseText = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
-
-export const makeSetUniqueElements = (items) => [...new Set(items)];
