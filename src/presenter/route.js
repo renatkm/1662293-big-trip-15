@@ -162,7 +162,7 @@ export default class Route {
     this._renderRoute();
   }
 
-  _clearRoute(resetSortType = false){
+  _clearRoute(resetSortType = false) {
     this._pointNewPresenter.delete();
     this._pointCollection.forEach((presenter) => presenter.delete());
     this._pointCollection.clear();
@@ -172,7 +172,7 @@ export default class Route {
     remove(this._loadingComponent);
     remove(this._pointsComponent);
 
-    if (resetSortType){
+    if (resetSortType) {
       this._currentSortType = SortTypes.DAY;
     }
   }

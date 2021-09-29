@@ -1,7 +1,6 @@
 import PointEditView from '../view/point-edit.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
-import {nanoid} from 'nanoid';
 
 export default class PointNew {
   constructor(pointListContainer, handlePointUpdate) {
@@ -32,7 +31,7 @@ export default class PointNew {
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
-  delete(){
+  delete() {
     if (this._pointEditComponent === null) {
       return;
     }
@@ -81,7 +80,7 @@ export default class PointNew {
     this._handlePointUpdate(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, point),
+      point,
     );
   }
 }
