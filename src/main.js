@@ -4,7 +4,7 @@ import FilterPresenter from './presenter/filter.js';
 import PointsModel from './model/points.js';
 import FilterModel from './model/filter.js';
 import OffersModel from './model/offers.js';
-import DestinationsModel from './model/destinations';
+import DestinationsModel from './model/destinations.js';
 import {UpdateType} from './const.js';
 import {render, RenderPosition} from './utils/render.js';
 import Api from './api.js';

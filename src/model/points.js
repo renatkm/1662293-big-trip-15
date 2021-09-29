@@ -1,18 +1,18 @@
 import AbstractObserver from './abstract-observer.js';
 
 export default class Points extends AbstractObserver {
-  constructor(){
+  constructor() {
     super();
     this._points = [];
   }
 
-  setPoints(updateType, points){
+  setPoints(updateType, points) {
     this._points = points.slice();
 
     this._notify(updateType, this._points);
   }
 
-  getPoints(){
+  getPoints() {
     return this._points;
   }
 
@@ -77,7 +77,7 @@ export default class Points extends AbstractObserver {
     return adaptedPoint;
   }
 
-  static adaptToServer(point){
+  static adaptToServer(point) {
     const adaptedPoint = Object.assign(
       {},
       point,

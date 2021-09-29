@@ -1,5 +1,5 @@
 import SmartView from './smart.js';
-import flatpickr  from 'flatpickr';
+import flatpickr from 'flatpickr';
 
 import {getHumanizedDateTime, getCapitalizedFirstLetterText, getLowerCaseText} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrNull} from '../utils/point.js';
@@ -291,7 +291,7 @@ export default class PointEdit extends SmartView {
     evt.preventDefault();
     const newDestination = getDestinationOrNull(evt.target.value, this._allDestinations);
 
-    if (!newDestination){
+    if (!newDestination) {
       evt.target.setCustomValidity('Please select an other city');
       evt.target.reportValidity();
       return;
@@ -396,7 +396,7 @@ export default class PointEdit extends SmartView {
     evt.preventDefault();
     formValidation(evt);
 
-    if (evt.target.checkValidity()){
+    if (evt.target.checkValidity()) {
       this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
     }
   }
@@ -413,7 +413,7 @@ export default class PointEdit extends SmartView {
     this.getElement().querySelector('.event__section').addEventListener('change', this._offerClickHandler);
 
     const closeEditFormElement = this.getElement().querySelector('.event__rollup-btn');
-    if (closeEditFormElement){
+    if (closeEditFormElement) {
       closeEditFormElement.addEventListener('click', this._pointClickHandler);
     }
   }

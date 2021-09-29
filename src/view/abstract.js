@@ -4,7 +4,7 @@ const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export default class Abstract {
   constructor() {
-    if (new.target === Abstract){
+    if (new.target === Abstract) {
       throw new Error('Can\'t instantiate abstract class');
     }
 
@@ -17,7 +17,7 @@ export default class Abstract {
   }
 
   getElement() {
-    if (!this._Element){
+    if (!this._Element) {
       this._Element = createElement(this.getTemplate());
     }
 

@@ -11,7 +11,7 @@ const destinationValidation = (evt) => {
     }
   }
 
-  if (!destinationFound){
+  if (!destinationFound) {
     destinationControl.setCustomValidity(`Sorry, there is no information about ${destinationControl.value}`);
   }
   else {

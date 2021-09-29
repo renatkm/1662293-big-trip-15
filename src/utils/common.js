@@ -32,14 +32,6 @@ export const getHumanizedDiffTime = (datetime1, datetime2) => {
   return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`.replace('00D 00H', '').replace('00D', '');
 };
 
-export const getDiffTime = (arrivalTime, departureTime) => {
-  const now = dayjs();
-  const date2 =  departureTime ? dayjs(departureTime) : now;
-  const date1 = arrivalTime ? dayjs(arrivalTime) : now;
-
-  return date2.diff(date1);
-};
-
 export const getCapitalizedFirstLetterText = (string) => string
   .split(/\s+/)
   .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
