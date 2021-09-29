@@ -1,10 +1,10 @@
 import AbstractView from './abstract.js';
-import {SortTypes} from '../const.js';
+import {SortType} from '../const.js';
 
-const createSortingTemplate = (sortType) => {
-  const sortTypesList = Object.values(SortTypes);
+const createSortingTemplate = (currentSortType) => {
+  const sortTypesList = Object.values(SortType);
   const getDisabled = (disabled) => disabled ? 'disabled' : '';
-  const getChecked = (type) => sortType === type ? 'checked' : '';
+  const getChecked = (type) => currentSortType === type ? 'checked' : '';
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${sortTypesList.map(({name, disabled}) => `

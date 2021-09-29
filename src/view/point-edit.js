@@ -248,7 +248,7 @@ export default class PointEdit extends SmartView {
       this._datepickerFrom.destroy();
       this._datepickerFrom = null;
     }
-    if(this._datepickerTo) {
+    if (this._datepickerTo) {
       this._datepickerTo.destroy();
       this._datepickerTo = null;
     }
@@ -373,7 +373,7 @@ export default class PointEdit extends SmartView {
     const currentOffers = [];
 
     offerElementsList.forEach((offer) => {
-      if(offer.checked) {
+      if (offer.checked) {
         currentOffers.push({
           title: offer.dataset.title,
           price: Number(offer.dataset.price),

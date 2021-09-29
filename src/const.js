@@ -1,6 +1,6 @@
 
 
-export const SortTypes = {
+export const SortType = {
   DAY: {
     name: 'day',
     disabled: false,

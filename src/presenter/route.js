@@ -8,9 +8,9 @@ import TripInfoView from '../view/tripInfo.js';
 import TripCostView from '../view/tripCost.js';
 import TripSummaryView from '../view/tripSummary.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
-import {filter} from '../utils/filter.js';
+import {FilterFunction} from '../utils/filter.js';
 import {comparePointDate, comparePointLength, comparePointBasePrice} from '../utils/point.js';
-import {SortTypes, UpdateType, UserAction, FilterType} from '../const.js';
+import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import LoadingView from '../view/loading.js';
 
 export default class Route {
@@ -24,7 +24,7 @@ export default class Route {
     this._api = api;
 
     this._pointCollection = new Map();
-    this._currentSortType = SortTypes.DAY.name;
+    this._currentSortType = SortType.DAY.name;
     this._filterType = FilterType.EVERYTHING;
     this._isLoading = true;
 
@@ -57,7 +57,7 @@ export default class Route {
     this._offers = this._offersModel.getOffers();
     this._destinations = this._destinationsModel.getDestinations();
 
-    this._currentSortType = SortTypes.DAY.name;
+    this._currentSortType = SortType.DAY.name;
     this._filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(this._offers, this._destinations, onCloseCallback);
   }
@@ -73,12 +73,12 @@ export default class Route {
   _getPoints() {
     this._filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filteredPoints = filter[this._filterType](points);
+    const filteredPoints = FilterFunction[this._filterType](points);
 
     switch(this._currentSortType) {
-      case SortTypes.PRICE.name:
+      case SortType.PRICE.name:
         return filteredPoints.sort(comparePointBasePrice);
-      case SortTypes.TIME.name:
+      case SortType.TIME.name:
         return filteredPoints.sort(comparePointLength);
     }
 
@@ -151,7 +151,7 @@ export default class Route {
   }
 
   _handleSortTypeChange(sortType) {
-    if(this._currentSortType === sortType) {
+    if (this._currentSortType === sortType) {
       return;
     }
 
@@ -173,7 +173,7 @@ export default class Route {
     remove(this._pointsComponent);
 
     if (resetSortType) {
-      this._currentSortType = SortTypes.DAY;
+      this._currentSortType = SortType.DAY;
     }
   }
 
@@ -248,7 +248,6 @@ export default class Route {
   }
 
   _renderNoPoints() {
-    // Отрисовка заглушки
     this._noPointComponent = new NoPointView(this._filterType);
     render(this._routeComponent, this._noPointComponent, RenderPosition.BEFOREEND);
   }
