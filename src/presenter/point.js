@@ -8,6 +8,12 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const ViewState = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class Point {
   constructor(pointListContainer, handlePointUpdate, handleModeChange) {
     this._pointListContainer = pointListContainer;
@@ -26,14 +32,14 @@ export default class Point {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(point) {
+  init(point, offers, destinations) {
     this._point = point;
 
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(point);
-    this._pointEditComponent = new PointEditView(point);
+    this._pointEditComponent = new PointEditView({point, offers, destinations});
 
     this._pointComponent.setPointClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -71,6 +77,41 @@ export default class Point {
     }
   }
 
+  setViewState(viewState) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch(viewState) {
+      case ViewState.SAVING:
+        this._pointEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+
+      case ViewState.DELETING:
+        this._pointEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+
+      case ViewState.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._pointEditComponent.shake(resetFormState);
+        break;
+    }
+  }
+
   _replaceViewToEdit() {
     replace(this._pointEditComponent, this._pointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -99,7 +140,7 @@ export default class Point {
   _handleDeleteClick(point) {
     this._handlePointUpdate(
       UserAction.DELETE_POINT,
-      UpdateType.MAJOR,
+      UpdateType.MINOR,
       point,
     );
   }
@@ -107,10 +148,9 @@ export default class Point {
   _handleFormSubmit(point) {
     this._handlePointUpdate(
       UserAction.UPDATE_POINT,
-      UpdateType.MAJOR,
+      UpdateType.MINOR,
       point,
     );
-    this._replaceEditToView();
   }
 
   _handleViewClick() {

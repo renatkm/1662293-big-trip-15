@@ -16,13 +16,13 @@ export default class PointNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(onCloseCallback) {
+  init(offers, destinations, onCloseCallback) {
     if (this._pointEditComponent !== null) {
       return;
     }
 
     this._onCloseCallback = onCloseCallback;
-    this._pointEditComponent = new PointEditView();
+    this._pointEditComponent = new PointEditView({offers, destinations});
 
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
@@ -47,6 +47,25 @@ export default class PointNew {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
+  processSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  processAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isDeleting: false,
+        isSaving: false,
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
+  }
+
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -64,6 +83,5 @@ export default class PointNew {
       UpdateType.MINOR,
       Object.assign({id: nanoid()}, point),
     );
-    this.delete();
   }
 }

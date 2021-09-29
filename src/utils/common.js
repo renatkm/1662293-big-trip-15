@@ -3,7 +3,9 @@ import dayjs from 'dayjs';
 const MINUTES_IN_A_DAY_NUMBER = 1440;
 const MINUTES_IN_A_HOUR_NUMBER = 60;
 
-export const getRandomInteger = (a = 0, b = 1) =>{
+const getTwoDigitsString = (number) => number.toString().padStart(2, '0');
+
+export const getRandomInteger = (a = 0, b = 1) => {
   const lBound = Math.ceil(Math.min(a, b));
   const uBound = Math.floor(Math.max(a, b));
 
@@ -20,14 +22,14 @@ export const getHumanizedDate = (datetime) => dayjs(getDatePart(datetime)).forma
 
 export const getHumanizedDateTime = (datetime) => dayjs(datetime).format('DD/MM/YY HH:mm');
 
-export const getHumanizedDiffTime = (datetime1, datetime2) =>{
+export const getHumanizedDiffTime = (datetime1, datetime2) => {
   let diff = dayjs(datetime1).diff(dayjs(datetime2), 'minute');
   const days = Math.floor(diff/MINUTES_IN_A_DAY_NUMBER);
   diff = diff % MINUTES_IN_A_DAY_NUMBER;
   const hours = Math.floor(diff/MINUTES_IN_A_HOUR_NUMBER);
   const minutes = (diff % MINUTES_IN_A_HOUR_NUMBER);
 
-  return  `${days ? `${days}D ` : ''}${hours ? `${hours}H ` : ''}${minutes ? `${minutes}M` : ''}`.trim();
+  return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`.replace('00D 00H', '').replace('00D', '');
 };
 
 export const getDiffTime = (arrivalTime, departureTime) => {
@@ -38,8 +40,9 @@ export const getDiffTime = (arrivalTime, departureTime) => {
   return date2.diff(date1);
 };
 
-export const getRoundDateTime = (datetime, minuteInterval) => {
-  const  minutes = Math.floor(dayjs(datetime).minutes() / minuteInterval)*minuteInterval;
+export const getCapitalizedFirstLetterText = (string) => string
+  .split(/\s+/)
+  .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+  .join(' ');
 
-  return dayjs(datetime).startOf('hour').add(minutes, 'minute');
-};
+export const getLowerCaseText = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();

@@ -1,10 +1,17 @@
-import he from 'he';
-import {getDestinationOrDefault} from '../utils/point.js';
-
 const destinationValidation = (evt) => {
   const destinationControl = evt.target.querySelector('.event__input--destination');
 
-  if (!getDestinationOrDefault(he.encode(destinationControl.value), false)){
+  let destinationFound = false;
+  const datalist = destinationControl.list;
+
+  for (let j = 0; j < datalist.options.length; j++) {
+    if (destinationControl.value === datalist.options[j].value) {
+      destinationFound = true;
+      break;
+    }
+  }
+
+  if (!destinationFound){
     destinationControl.setCustomValidity(`Sorry, there is no information about ${destinationControl.value}`);
   }
   else {
@@ -26,7 +33,21 @@ const basePriceValidation = (evt) => {
   baePriceControl.reportValidity();
 };
 
+const pointDatesValidation = (evt) => {
+  const startTimeElement = evt.target.querySelector('[name=event-start-time]');
+  const endTimeElement = evt.target.querySelector('[name=event-end-time]');
+
+  if (startTimeElement.value > endTimeElement.value) {
+    endTimeElement.setCustomValidity('The start of the event can\'t be later then the end of event.');
+  } else {
+    endTimeElement.setCustomValidity('');
+  }
+
+  endTimeElement.reportValidity();
+};
+
 export const formValidation = (evt) => {
   destinationValidation(evt);
   basePriceValidation(evt);
+  pointDatesValidation(evt);
 };
