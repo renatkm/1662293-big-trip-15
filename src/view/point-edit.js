@@ -200,10 +200,6 @@ export default class PointEdit extends SmartView {
     super();
     const {point = EMPTY_POINT, offers, destinations} = data;
 
-    // if (point === EMPTY_POINT) {
-    //   point.destination = destinations[0];
-    // }
-
     this._data = PointEdit.parsePointToData(point);
     this._allOffers = offers;
     this._allDestinations = destinations;
