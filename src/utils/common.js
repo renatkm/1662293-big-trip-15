@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
-const MINUTES_IN_A_DAY_NUMBER = 1440;
-const MINUTES_IN_A_HOUR_NUMBER = 60;
+const NUMBER_MIN_PER_DAY = 1440;
+const NUMBER_MIN_PER_HOUR = 60;
 
 const getTwoDigitsString = (number) => number.toString().padStart(2, '0');
 
@@ -22,15 +22,25 @@ export const getHumanizedDate = (datetime) => dayjs(getDatePart(datetime)).forma
 
 export const getHumanizedDateTime = (datetime) => dayjs(datetime).format('DD/MM/YY HH:mm');
 
-export const getHumanizedDiffTime = (datetime1, datetime2) => {
-  let diff = dayjs(datetime1).diff(dayjs(datetime2), 'minute');
-  const days = Math.floor(diff/MINUTES_IN_A_DAY_NUMBER);
-  diff = diff % MINUTES_IN_A_DAY_NUMBER;
-  const hours = Math.floor(diff/MINUTES_IN_A_HOUR_NUMBER);
-  const minutes = (diff % MINUTES_IN_A_HOUR_NUMBER);
+export const getDurationTime = (duration) => {
+  // duration in ms, convert it to minutes
+  const totalMinutes = Math.round(duration/(1000*60));
+  const days = Math.floor(totalMinutes/NUMBER_MIN_PER_DAY);
+  const hours = Math.floor(totalMinutes/NUMBER_MIN_PER_HOUR);
+  const minutes = (totalMinutes % NUMBER_MIN_PER_HOUR);
 
-  return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`.replace('00D 00H', '').replace('00D', '');
+  if (days > 0) {
+    return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`;
+  }
+
+  if (days === 0 & hours > 0) {
+    return `${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`;
+  }
+
+  return `${getTwoDigitsString(minutes)}M`;
 };
+
+export const getHumanizedDiffTime = (datetime1, datetime2) => getDurationTime(dayjs(datetime1).diff(dayjs(datetime2)));
 
 export const getCapitalizedFirstLetterText = (string) => string
   .split(/\s+/)
@@ -38,3 +48,5 @@ export const getCapitalizedFirstLetterText = (string) => string
   .join(' ');
 
 export const getLowerCaseText = (offerName) => offerName.replace(/\s+/gm, '-').toLowerCase();
+
+export const makeSetUniqueElements = (items) => [...new Set(items)];
