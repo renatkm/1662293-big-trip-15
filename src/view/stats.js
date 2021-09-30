@@ -75,28 +75,42 @@ const generateChartConfiguration = (title, dataLabels, dataSet, formatter) => ({
   },
 });
 
-const moneyChart = (chartElement, points, pointLabels) => {
-  const moneyArray =  Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map));
+const moneyChart = (canvasElement, points, pointLabels) => {
+  const moneyArray =  Array.from(points.reduce(
+    (point, { type, basePrice }) => {
+      const accumulatedPrice = point.get(type) || 0;
+      return point.set(type, accumulatedPrice + basePrice);
+    },
+    new Map));
+
   const dataSet = moneyArray.map((it) => it[1]);
 
-  return new Chart(chartElement, generateChartConfiguration('MONEY', pointLabels, dataSet, (val) => `€ ${val}`));
+  return new Chart(canvasElement, generateChartConfiguration('MONEY', pointLabels, dataSet, (val) => `€ ${val}`));
 };
 
-const typeChart = (chartElement, points, pointLabels) => {
-  const sequence =  Array.from(points.reduce((point, {type}) => point.set(type, (point.get(type) || 0) + 1), new Map));
+const typeChart = (canvasElement, points, pointLabels) => {
+  const sequence =  Array.from(points.reduce((point, {type}) => {
+    const accumulatedCounter = point.get(type) || 0;
+    return point.set(type, accumulatedCounter + 1);
+  }, new Map));
+
   const dataSet = sequence.map((it) => it[1]);
 
-  return new Chart(chartElement, generateChartConfiguration('TYPE', pointLabels, dataSet, (val) => `${val}x`));
+  return new Chart(canvasElement, generateChartConfiguration('TYPE', pointLabels, dataSet, (val) => `${val}x`));
 };
 
-const timeChart = (chartElement, points, pointLabels) => {
-  const sequence =  Array.from(points.reduce((point, { type, arrivalTime, departureTime }) => point.set(type, (point.get(type) || 0) + dayjs(departureTime).diff(dayjs(arrivalTime))), new Map));
+const timeChart = (canvasElement, points, pointLabels) => {
+  const sequence =  Array.from(points.reduce((point, { type, arrivalTime, departureTime }) => {
+    const accumulatedDuration = point.get(type) || 0;
+    return point.set(type, accumulatedDuration + dayjs(departureTime).diff(dayjs(arrivalTime)));
+  }, new Map));
+
   const dataSet = sequence.map((it) => it[1]);
 
-  return new Chart(chartElement, generateChartConfiguration('TIME-SPEND', pointLabels, dataSet, (val) => `${getDurationTime(val)}`));
+  return new Chart(canvasElement, generateChartConfiguration('TIME-SPEND', pointLabels, dataSet, (val) => `${getDurationTime(val)}`));
 };
 
-const createStatisticsTemplate = () => {
+const createStatsTemplate = () => {
   const canvasTypes = Object.values(CanvasType);
 
   return `<section class="statistics">
@@ -128,7 +142,7 @@ export default class Stats extends SmartView {
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._points);
+    return createStatsTemplate(this._points);
   }
 
   restoreHandlers() {
@@ -136,19 +150,19 @@ export default class Stats extends SmartView {
   }
 
   _setCharts() {
-    const moneyCtxElement = this.getElement().querySelector('#money');
-    const typeCtxElement = this.getElement().querySelector('#type');
-    const timeCtxElement = this.getElement().querySelector('#time-spend');
+    const moneyCanvasElement = this.getElement().querySelector('#money');
+    const typeCanvasElement = this.getElement().querySelector('#type');
+    const timeCanvasElement = this.getElement().querySelector('#time-spend');
 
-    moneyCtxElement.height = BAR_HEIGHT * 5;
-    typeCtxElement.height = BAR_HEIGHT * 5;
-    timeCtxElement.height = BAR_HEIGHT * 5;
+    moneyCanvasElement.height = BAR_HEIGHT * 5;
+    typeCanvasElement.height = BAR_HEIGHT * 5;
+    timeCanvasElement.height = BAR_HEIGHT * 5;
 
     const types = this._points.map((point) => point.type);
     const distinctPointTypes = [...new Set(types)];
 
-    this._moneyChartComponent = moneyChart(moneyCtxElement, this._points, distinctPointTypes);
-    this._typeChartComponent = typeChart(typeCtxElement, this._points, distinctPointTypes);
-    this._timeChartComponent = timeChart(timeCtxElement, this._points, distinctPointTypes);
+    this._moneyChartComponent = moneyChart(moneyCanvasElement, this._points, distinctPointTypes);
+    this._typeChartComponent = typeChart(typeCanvasElement, this._points, distinctPointTypes);
+    this._timeChartComponent = timeChart(timeCanvasElement, this._points, distinctPointTypes);
   }
 }

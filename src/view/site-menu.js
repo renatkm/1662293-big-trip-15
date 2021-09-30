@@ -19,12 +19,12 @@ export default class SiteMenu extends AbstractView {
 
   setMenuItem(menuItem) {
     const items = this.getElement().querySelectorAll('.trip-tabs__btn');
+
     items.forEach((item) => {
       item.classList.remove('trip-tabs__btn--active');
-      if (item.text === menuItem) {
-        item.classList.add('trip-tabs__btn--active');
-      }
     });
+
+    menuItem.classList.add('trip-tabs__btn--active');
   }
 
   setMenuClickHandler(callback) {

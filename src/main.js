@@ -57,11 +57,10 @@ const filterPresenter = new FilterPresenter(filterElement, filterModel, pointsMo
 let statsComponent = null;
 
 const handleSiteMenuClick = (menuElement) => {
-  const menuItem = menuElement.text;
   routePresenter.delete();
-  siteMenuComponent.setMenuItem(menuItem);
+  siteMenuComponent.setMenuItem(menuElement);
 
-  switch (menuItem) {
+  switch (menuElement.text) {
     case MenuItem.TABLE:
       remove(statsComponent);
       routePresenter.init();
