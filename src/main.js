@@ -3,7 +3,7 @@ import StatsView from './view/stats.js';
 import RoutePresenter from './presenter/route.js';
 import FilterPresenter from './presenter/filter.js';
 import PointsModel from './model/points.js';
-import FilterModel from './model/filter.js';
+import FiltersModel from './model/filters.js';
 import OffersModel from './model/offers.js';
 import DestinationsModel from './model/destinations.js';
 import {UpdateType, MenuItem} from './const.js';
@@ -28,7 +28,7 @@ const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
-const filterModel = new FilterModel();
+const filtersModel = new FiltersModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
@@ -51,8 +51,8 @@ Promise.all([
 const siteMenuComponent = new SiteMenuView();
 render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 
-const routePresenter = new RoutePresenter(tripElement, pointsModel, filterModel, offersModel, destinationsModel, api);
-const filterPresenter = new FilterPresenter(filterElement, filterModel, pointsModel);
+const routePresenter = new RoutePresenter(tripElement, pointsModel, filtersModel, offersModel, destinationsModel, api);
+const filterPresenter = new FilterPresenter(filterElement, filtersModel, pointsModel);
 
 let statsComponent = null;
 
