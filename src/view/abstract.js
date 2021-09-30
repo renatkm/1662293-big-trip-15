@@ -8,7 +8,7 @@ export default class Abstract {
       throw new Error('Can\'t instantiate abstract class');
     }
 
-    this._Element = null;
+    this._element = null;
     this._callback = {};
   }
 
@@ -17,15 +17,15 @@ export default class Abstract {
   }
 
   getElement() {
-    if (!this._Element) {
-      this._Element = createElement(this.getTemplate());
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
     }
 
-    return this._Element;
+    return this._element;
   }
 
   removeElement() {
-    this._Element = null;
+    this._element = null;
   }
 
   shake(callback) {

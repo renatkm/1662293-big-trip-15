@@ -1,6 +1,6 @@
 
 
-export const SortTypes = {
+export const SortType = {
   DAY: {
     name: 'day',
     disabled: false,
@@ -46,4 +46,10 @@ export const FilterType = {
 export const MenuItem = {
   TABLE: 'Table',
   STATS: 'Stats',
+};
+
+export const CanvasType = {
+  MONEY: 'money',
+  TYPE: 'type',
+  TIME_SPEND: 'time-spend',
 };

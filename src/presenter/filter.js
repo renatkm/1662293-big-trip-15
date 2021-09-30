@@ -1,12 +1,12 @@
 import FilterView from '../view/filter.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-import {filter} from '../utils/filter.js';
+import {FilterFunction} from '../utils/filter.js';
 import {FilterType, UpdateType} from '../const.js';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, pointsModel) {
+  constructor(filterContainer, filtersModel, pointsModel) {
     this._filterContainer = filterContainer;
-    this._filterModel = filterModel;
+    this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
 
     this._filterComponent = null;
@@ -15,14 +15,14 @@ export default class Filter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._filtersModel.addObserver(this._handleModelEvent);
   }
 
   init() {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+    this._filterComponent = new FilterView(filters, this._filtersModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -39,11 +39,11 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._filtersModel.getFilter() === filterType) {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filtersModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
@@ -53,17 +53,17 @@ export default class Filter {
       {
         type: FilterType.EVERYTHING,
         name: 'Everything',
-        count: filter[FilterType.EVERYTHING](points).length,
+        count: FilterFunction[FilterType.EVERYTHING](points).length,
       },
       {
         type: FilterType.FUTURE,
         name: 'Future',
-        count: filter[FilterType.FUTURE](points).length,
+        count: FilterFunction[FilterType.FUTURE](points).length,
       },
       {
         type: FilterType.PAST,
         name: 'Past',
-        count: filter[FilterType.PAST](points).length,
+        count: FilterFunction[FilterType.PAST](points).length,
       },
     ];
   }

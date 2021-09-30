@@ -200,10 +200,6 @@ export default class PointEdit extends SmartView {
     super();
     const {point = EMPTY_POINT, offers, destinations} = data;
 
-    // if (point === EMPTY_POINT) {
-    //   point.destination = destinations[0];
-    // }
-
     this._data = PointEdit.parsePointToData(point);
     this._allOffers = offers;
     this._allDestinations = destinations;
@@ -252,7 +248,7 @@ export default class PointEdit extends SmartView {
       this._datepickerFrom.destroy();
       this._datepickerFrom = null;
     }
-    if(this._datepickerTo) {
+    if (this._datepickerTo) {
       this._datepickerTo.destroy();
       this._datepickerTo = null;
     }
@@ -377,7 +373,7 @@ export default class PointEdit extends SmartView {
     const currentOffers = [];
 
     offerElementsList.forEach((offer) => {
-      if(offer.checked) {
+      if (offer.checked) {
         currentOffers.push({
           title: offer.dataset.title,
           price: Number(offer.dataset.price),
