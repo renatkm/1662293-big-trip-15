@@ -10,6 +10,9 @@ import {UpdateType, MenuItem} from './const.js';
 import {render, RenderPosition, remove} from './utils/render.js';
 import Api from './api.js';
 
+const AUTHORIZATION = 'Basic cmVuYXQ6a3V0bGl5YXJvdg==';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
+
 const siteMenuElement = document.querySelector('.trip-main__trip-controls');
 const siteHeaderElement = siteMenuElement.querySelector('.trip-controls__navigation');
 const filterElement = siteMenuElement.querySelector('.trip-controls__filters');
@@ -18,12 +21,10 @@ const newPointButtonElement = document.querySelector('.trip-main__event-add-btn'
 const siteMainElement = document.querySelector('main.page-body__page-main .page-body__container');
 
 newPointButtonElement.disabled = true;
+
 const onClosePointNewFormCallback = () => {
   newPointButtonElement.disabled = false;
 };
-
-const AUTHORIZATION = 'Basic cmVuYXQ6a3V0bGl5YXJvdg==';
-const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
@@ -56,29 +57,30 @@ const filterPresenter = new FilterPresenter(filterElement, filtersModel, pointsM
 
 let statsComponent = null;
 
-const handleSiteMenuClick = (menuElement) => {
+const siteMenuClickHandler = (menuElement) => {
   routePresenter.delete();
   siteMenuComponent.setMenuItem(menuElement);
 
   switch (menuElement.text) {
-    case MenuItem.TABLE:
+    case MenuItem.TABLE: {
       remove(statsComponent);
       routePresenter.init();
       newPointButtonElement.disabled = false;
       filterPresenter.init();
       break;
-
-    case MenuItem.STATS:
+    }
+    case MenuItem.STATS: {
       routePresenter.delete();
       newPointButtonElement.disabled = true;
       document.querySelectorAll('.trip-filters__filter-input').forEach((filter) => filter.disabled = true);
       statsComponent = new StatsView(pointsModel.getPoints());
       render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
       break;
+    }
   }
 };
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+siteMenuComponent.setMenuClickHandler(siteMenuClickHandler);
 
 routePresenter.init();
 filterPresenter.init();

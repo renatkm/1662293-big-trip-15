@@ -75,20 +75,20 @@ const generateChartConfiguration = (title, dataLabels, dataSet, formatter) => ({
   },
 });
 
-const moneyChart = (canvasElement, points, pointLabels) => {
-  const moneyArray =  Array.from(points.reduce(
+const createMoneyChart = (canvasElement, points, pointLabels) => {
+  const sequence =  Array.from(points.reduce(
     (point, { type, basePrice }) => {
       const accumulatedPrice = point.get(type) || 0;
       return point.set(type, accumulatedPrice + basePrice);
     },
     new Map));
 
-  const dataSet = moneyArray.map((it) => it[1]);
+  const dataSet = sequence.map((it) => it[1]);
 
   return new Chart(canvasElement, generateChartConfiguration('MONEY', pointLabels, dataSet, (val) => `€ ${val}`));
 };
 
-const typeChart = (canvasElement, points, pointLabels) => {
+const createTypeChart = (canvasElement, points, pointLabels) => {
   const sequence =  Array.from(points.reduce((point, {type}) => {
     const accumulatedCounter = point.get(type) || 0;
     return point.set(type, accumulatedCounter + 1);
@@ -99,7 +99,7 @@ const typeChart = (canvasElement, points, pointLabels) => {
   return new Chart(canvasElement, generateChartConfiguration('TYPE', pointLabels, dataSet, (val) => `${val}x`));
 };
 
-const timeChart = (canvasElement, points, pointLabels) => {
+const createTimeChart = (canvasElement, points, pointLabels) => {
   const sequence =  Array.from(points.reduce((point, { type, arrivalTime, departureTime }) => {
     const accumulatedDuration = point.get(type) || 0;
     return point.set(type, accumulatedDuration + dayjs(departureTime).diff(dayjs(arrivalTime)));
@@ -161,8 +161,8 @@ export default class Stats extends SmartView {
     const types = this._points.map((point) => point.type);
     const distinctPointTypes = [...new Set(types)];
 
-    this._moneyChartComponent = moneyChart(moneyCanvasElement, this._points, distinctPointTypes);
-    this._typeChartComponent = typeChart(typeCanvasElement, this._points, distinctPointTypes);
-    this._timeChartComponent = timeChart(timeCanvasElement, this._points, distinctPointTypes);
+    this._moneyChartComponent = createMoneyChart(moneyCanvasElement, this._points, distinctPointTypes);
+    this._typeChartComponent = createTypeChart(typeCanvasElement, this._points, distinctPointTypes);
+    this._timeChartComponent = createTimeChart(timeCanvasElement, this._points, distinctPointTypes);
   }
 }

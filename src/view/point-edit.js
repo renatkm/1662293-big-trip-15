@@ -3,11 +3,11 @@ import flatpickr from 'flatpickr';
 
 import {getHumanizedDateTime, getCapitalizedFirstLetterText, getLowerCaseText} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrNull} from '../utils/point.js';
-import {formValidation} from '../utils/form-validation.js';
+import {validateForm} from '../utils/form-validation.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-export const EMPTY_POINT = {
+const EMPTY_POINT = {
   destination: {
     name: '',
     description: '',
@@ -390,7 +390,7 @@ export default class PointEdit extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    formValidation(evt);
+    validateForm(evt);
 
     if (evt.target.checkValidity()) {
       this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));

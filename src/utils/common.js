@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
 
-const NUMBER_MIN_PER_DAY = 1440;
-const NUMBER_MIN_PER_HOUR = 60;
+const MinutesPeriod = {
+  PER_DAY: 1440,
+  PER_HOUR: 60,
+};
 
 const getTwoDigitsString = (number) => number.toString().padStart(2, '0');
 
@@ -16,9 +18,9 @@ export const getHumanizedDateTime = (datetime) => dayjs(datetime).format('DD/MM/
 export const getDurationTime = (duration) => {
   // duration in ms, convert it to minutes
   const totalMinutes = Math.round(duration/(1000*60));
-  const days = Math.floor(totalMinutes/NUMBER_MIN_PER_DAY);
-  const hours = Math.floor(totalMinutes/NUMBER_MIN_PER_HOUR);
-  const minutes = (totalMinutes % NUMBER_MIN_PER_HOUR);
+  const days = Math.floor(totalMinutes/MinutesPeriod.PER_DAY);
+  const hours = Math.floor(totalMinutes/MinutesPeriod.PER_HOUR);
+  const minutes = (totalMinutes % MinutesPeriod.PER_HOUR);
 
   if (days > 0) {
     return `${getTwoDigitsString(days)}D ${getTwoDigitsString(hours)}H ${getTwoDigitsString(minutes)}M`;

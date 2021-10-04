@@ -5,7 +5,7 @@ import PointPresenter, {ViewState} from './point.js';
 import PointNewPresenter from './point-new.js';
 import SortingView from '../view/sorting.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
-import {FilterFunction} from '../utils/filter.js';
+import {filter} from '../utils/filter.js';
 import {comparePointDate, comparePointLength, comparePointBasePrice} from '../utils/point.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import LoadingView from '../view/loading.js';
@@ -67,21 +67,23 @@ export default class Route {
   _getPoints() {
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filteredPoints = FilterFunction[this._filterType](points);
+    const filteredPoints = filter[this._filterType](points);
 
-    switch(this._currentSortType) {
-      case SortType.PRICE.name:
+    switch (this._currentSortType) {
+      case SortType.PRICE.name: {
         return filteredPoints.sort(comparePointBasePrice);
-      case SortType.TIME.name:
+      }
+      case SortType.TIME.name: {
         return filteredPoints.sort(comparePointLength);
+      }
     }
 
     return filteredPoints.sort(comparePointDate);
   }
 
   _handleViewAction(actionType, updateType, update) {
-    switch(actionType) {
-      case UserAction.UPDATE_POINT:
+    switch (actionType) {
+      case UserAction.UPDATE_POINT: {
         this._pointCollection.get(update.id).setViewState(ViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
@@ -90,8 +92,9 @@ export default class Route {
             this._pointCollection.get(update.id).setViewState(ViewState.ABORTING);
           });
         break;
+      }
 
-      case UserAction.ADD_POINT:
+      case UserAction.ADD_POINT: {
         this._pointNewPresenter.processSaving();
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
@@ -100,8 +103,9 @@ export default class Route {
             this._pointNewPresenter.processAborting();
           });
         break;
+      }
 
-      case UserAction.DELETE_POINT:
+      case UserAction.DELETE_POINT: {
         this._pointCollection.get(update.id).setViewState(ViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
@@ -110,32 +114,37 @@ export default class Route {
             this._pointCollection.get(update.id).setViewState(ViewState.ABORTING);
           });
         break;
+      }
     }
   }
 
   _handleModelEvent(updateType, data) {
-    switch(updateType) {
-      case UpdateType.PATCH:
+    switch (updateType) {
+      case UpdateType.PATCH: {
         this._pointCollection.get(data.id).init(data);
         break;
+      }
 
-      case UpdateType.MINOR:
+      case UpdateType.MINOR: {
         this._clearRoute();
         this._renderRoute();
         //обновить часть проекта
         break;
+      }
 
-      case UpdateType.MAJOR:
+      case UpdateType.MAJOR: {
         //обновить проект полностью
         this._clearRoute(true);
         this._renderRoute();
         break;
+      }
 
-      case UpdateType.INIT:
+      case UpdateType.INIT: {
         this._isLoading = false;
         remove(this._loadingComponent);
         this._renderRoute();
         break;
+      }
     }
   }
 

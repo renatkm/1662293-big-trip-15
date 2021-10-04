@@ -14,13 +14,16 @@ export const render = (container, child, place) => {
     child = child.getElement();
   }
 
-  switch(place) {
-    case RenderPosition.AFTERBEGIN:
+  switch (place) {
+    case RenderPosition.AFTERBEGIN: {
       container.prepend(child);
       break;
-    case RenderPosition.BEFOREEND:
+    }
+
+    case RenderPosition.BEFOREEND: {
       container.append(child);
       break;
+    }
   }
 };
 

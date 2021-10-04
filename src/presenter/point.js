@@ -90,25 +90,28 @@ export default class Point {
       });
     };
 
-    switch(viewState) {
-      case ViewState.SAVING:
+    switch (viewState) {
+      case ViewState.SAVING: {
         this._pointEditComponent.updateData({
           isDisabled: true,
           isSaving: true,
         });
         break;
+      }
 
-      case ViewState.DELETING:
+      case ViewState.DELETING: {
         this._pointEditComponent.updateData({
           isDisabled: true,
           isDeleting: true,
         });
         break;
+      }
 
-      case ViewState.ABORTING:
+      case ViewState.ABORTING: {
         this._pointComponent.shake(resetFormState);
         this._pointEditComponent.shake(resetFormState);
         break;
+      }
     }
   }
 

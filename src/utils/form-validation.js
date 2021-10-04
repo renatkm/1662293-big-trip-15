@@ -1,4 +1,4 @@
-const destinationValidation = (evt) => {
+const validateDestination = (evt) => {
   const destinationControl = evt.target.querySelector('.event__input--destination');
 
   let destinationFound = false;
@@ -21,7 +21,7 @@ const destinationValidation = (evt) => {
   destinationControl.reportValidity();
 };
 
-const basePriceValidation = (evt) => {
+const validateBasePrice = (evt) => {
   const baePriceControl = evt.target.querySelector('.event__input--price');
 
   if (!baePriceControl.value) {
@@ -33,7 +33,7 @@ const basePriceValidation = (evt) => {
   baePriceControl.reportValidity();
 };
 
-const pointDatesValidation = (evt) => {
+const validateDates = (evt) => {
   const startTimeElement = evt.target.querySelector('[name=event-start-time]');
   const endTimeElement = evt.target.querySelector('[name=event-end-time]');
 
@@ -46,8 +46,8 @@ const pointDatesValidation = (evt) => {
   endTimeElement.reportValidity();
 };
 
-export const formValidation = (evt) => {
-  destinationValidation(evt);
-  basePriceValidation(evt);
-  pointDatesValidation(evt);
+export const validateForm = (evt) => {
+  validateDestination(evt);
+  validateBasePrice(evt);
+  validateDates(evt);
 };
