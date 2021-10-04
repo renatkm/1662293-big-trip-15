@@ -63,7 +63,7 @@ const createPointTemplate = (point) =>  {
 };
 
 
-export default class Point extends AbstractView {
+class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
@@ -95,3 +95,5 @@ export default class Point extends AbstractView {
     this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
 }
+
+export default Point;

@@ -1,6 +1,6 @@
 import AbstractObserver from './abstract-observer.js';
 
-export default class Destination extends AbstractObserver {
+class Destinations extends AbstractObserver {
   constructor() {
     super();
     this._destinations = [];
@@ -16,3 +16,5 @@ export default class Destination extends AbstractObserver {
     return this._destinations;
   }
 }
+
+export default Destinations;

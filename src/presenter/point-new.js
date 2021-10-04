@@ -2,7 +2,7 @@ import PointEditView from '../view/point-edit.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
-export default class PointNew {
+class PointNew {
   constructor(pointListContainer, handlePointUpdate) {
     this._pointListContainer = pointListContainer;
     this._handlePointUpdate = handlePointUpdate;
@@ -84,3 +84,5 @@ export default class PointNew {
     );
   }
 }
+
+export default PointNew;

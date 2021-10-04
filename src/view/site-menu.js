@@ -6,7 +6,7 @@ const createMenuTemplate = () => `<nav class="trip-controls__trip-tabs  trip-tab
     <a class="trip-tabs__btn" href="#">${MenuItem.STATS}</a>
   </nav>`;
 
-export default class SiteMenu extends AbstractView {
+class SiteMenu extends AbstractView {
   constructor() {
     super();
 
@@ -37,3 +37,5 @@ export default class SiteMenu extends AbstractView {
     this._callback.menuClick(evt.target);
   }
 }
+
+export default SiteMenu;

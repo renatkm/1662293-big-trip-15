@@ -1,6 +1,4 @@
-
-
-export const SortType = {
+const SortType = {
   DAY: {
     name: 'day',
     disabled: false,
@@ -24,32 +22,34 @@ export const SortType = {
 };
 
 
-export const UserAction = {
+const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
   DELETE_POINT: 'DELETE_POINT',
 };
 
-export const UpdateType = {
+const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
 };
 
-export const FilterType = {
+const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',
 };
 
-export const MenuItem = {
+const MenuItem = {
   TABLE: 'Table',
   STATS: 'Stats',
 };
 
-export const CanvasType = {
+const CanvasType = {
   MONEY: 'money',
   TYPE: 'type',
   TIME_SPEND: 'time-spend',
 };
+
+export {SortType, UserAction, UpdateType, FilterType, MenuItem, CanvasType};

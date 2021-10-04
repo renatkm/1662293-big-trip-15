@@ -8,13 +8,13 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
-export const ViewState = {
+const ViewState = {
   SAVING: 'SAVING',
   DELETING: 'DELETING',
   ABORTING: 'ABORTING',
 };
 
-export default class Point {
+class Point {
   constructor(pointListContainer, handlePointUpdate, handleModeChange) {
     this._pointListContainer = pointListContainer;
     this._handlePointUpdate = handlePointUpdate;
@@ -175,3 +175,6 @@ export default class Point {
     );
   }
 }
+
+export {ViewState};
+export default Point;

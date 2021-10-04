@@ -29,7 +29,7 @@ const createFilterTemplate = (filterItems, currentFilterType) => {
     </form>`;
 };
 
-export default class Filter extends AbstractView {
+class Filter extends AbstractView {
   constructor(filters, currentFilterType) {
     super();
     this._currentFilterType = currentFilterType;
@@ -56,3 +56,5 @@ export default class Filter extends AbstractView {
     this.getElement().addEventListener('click', this._filterTypeChangeHandler);
   }
 }
+
+export default Filter;

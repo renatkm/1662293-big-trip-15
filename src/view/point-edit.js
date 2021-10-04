@@ -1,6 +1,5 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
-
 import {getHumanizedDateTime, getCapitalizedFirstLetterText, getLowerCaseText} from '../utils/common.js';
 import {getOfferListByPointType, getDestinationOrNull} from '../utils/point.js';
 import {validateForm} from '../utils/form-validation.js';
@@ -195,7 +194,7 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
 </li> `;
 };
 
-export default class PointEdit extends SmartView {
+class PointEdit extends SmartView {
   constructor(data) {
     super();
     const {point = EMPTY_POINT, offers, destinations} = data;
@@ -439,3 +438,5 @@ export default class PointEdit extends SmartView {
     return point;
   }
 }
+
+export default PointEdit;

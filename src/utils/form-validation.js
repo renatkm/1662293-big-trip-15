@@ -46,8 +46,10 @@ const validateDates = (evt) => {
   endTimeElement.reportValidity();
 };
 
-export const validateForm = (evt) => {
+const validateForm = (evt) => {
   validateDestination(evt);
   validateBasePrice(evt);
   validateDates(evt);
 };
+
+export {validateForm};

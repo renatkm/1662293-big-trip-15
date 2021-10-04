@@ -122,7 +122,7 @@ const createStatsTemplate = () => {
   </section>`;
 };
 
-export default class Stats extends SmartView {
+class Stats extends SmartView {
   constructor(points) {
     super();
     this._points = points;
@@ -166,3 +166,5 @@ export default class Stats extends SmartView {
     this._timeChartComponent = createTimeChart(timeCanvasElement, this._points, distinctPointTypes);
   }
 }
+
+export default Stats;

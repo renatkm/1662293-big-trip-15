@@ -7,7 +7,7 @@ const Method = {
   DELETE: 'DELETE',
 };
 
-export default class Api {
+class Api {
   constructor(endpoint, authorization) {
     this._endpoint = endpoint;
     this._authorization = authorization;
@@ -89,3 +89,5 @@ export default class Api {
     throw err;
   }
 }
+
+export default Api;

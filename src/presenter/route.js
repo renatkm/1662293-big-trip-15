@@ -10,7 +10,7 @@ import {comparePointDate, comparePointLength, comparePointBasePrice} from '../ut
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import LoadingView from '../view/loading.js';
 
-export default class Route {
+class Route {
   constructor(routeContainer, pointsModel, filtersModel, offersModel, destinationsModel, api) {
     //Инициализация контейнера
     this._routeContainer = routeContainer;
@@ -245,3 +245,5 @@ export default class Route {
     render(this._routeComponent, this._noPointComponent, RenderPosition.BEFOREEND);
   }
 }
+
+export default Route;
