@@ -194,7 +194,7 @@ const createPointEditTemplate = (data, allOffers, allDestinations, isNewPoint) =
 </li> `;
 };
 
-class PointEdit extends SmartView {
+export default class PointEdit extends SmartView {
   constructor(data) {
     super();
     const {point = EMPTY_POINT, offers, destinations} = data;
@@ -266,6 +266,23 @@ class PointEdit extends SmartView {
     this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
+  _setDatepickers() {
+    this._setDatepickerFrom();
+    this._setDatepickerTo();
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-list').addEventListener('click', this._typeChangeHandler);
+    this.getElement().querySelector('.event__input').addEventListener('change', this._destinationChangeHandler);
+    this.getElement().querySelector('.event__input--price').addEventListener('input', this._basePriceChangeHandler);
+    this.getElement().querySelector('.event__section').addEventListener('change', this._offerClickHandler);
+
+    const closeEditFormElement = this.getElement().querySelector('.event__rollup-btn');
+    if (closeEditFormElement) {
+      closeEditFormElement.addEventListener('click', this._pointClickHandler);
+    }
+  }
+
   _pointClickHandler(evt) {
     evt.preventDefault();
     this._callback.pointClick();
@@ -316,11 +333,6 @@ class PointEdit extends SmartView {
       );
     }
     evt.target.reportValidity();
-  }
-
-  _setDatepickers() {
-    this._setDatepickerFrom();
-    this._setDatepickerTo();
   }
 
   _setDatepickerFrom() {
@@ -401,18 +413,6 @@ class PointEdit extends SmartView {
     this._callback.deleteClick(PointEdit.parseDataToPoint(this._data));
   }
 
-  _setInnerHandlers() {
-    this.getElement().querySelector('.event__type-list').addEventListener('click', this._typeChangeHandler);
-    this.getElement().querySelector('.event__input').addEventListener('change', this._destinationChangeHandler);
-    this.getElement().querySelector('.event__input--price').addEventListener('input', this._basePriceChangeHandler);
-    this.getElement().querySelector('.event__section').addEventListener('change', this._offerClickHandler);
-
-    const closeEditFormElement = this.getElement().querySelector('.event__rollup-btn');
-    if (closeEditFormElement) {
-      closeEditFormElement.addEventListener('click', this._pointClickHandler);
-    }
-  }
-
   static parsePointToData(point) {
     return Object.assign(
       {},
@@ -439,4 +439,3 @@ class PointEdit extends SmartView {
   }
 }
 
-export default PointEdit;

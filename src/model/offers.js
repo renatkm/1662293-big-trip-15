@@ -1,6 +1,6 @@
 import AbstractObserver from './abstract-observer.js';
 
-class Offers extends AbstractObserver {
+export default class Offers extends AbstractObserver {
   constructor() {
     super();
     this._offers = [];
@@ -17,4 +17,3 @@ class Offers extends AbstractObserver {
   }
 }
 
-export default Offers;

@@ -1,36 +1,35 @@
 const validateDestination = (evt) => {
-  const destinationControl = evt.target.querySelector('.event__input--destination');
+  const destinationElement = evt.target.querySelector('.event__input--destination');
 
   let destinationFound = false;
-  const datalist = destinationControl.list;
 
-  for (let j = 0; j < datalist.options.length; j++) {
-    if (destinationControl.value === datalist.options[j].value) {
+  for (const option of destinationElement.list.options) {
+    if (destinationElement.value === option.value) {
       destinationFound = true;
       break;
     }
   }
 
   if (!destinationFound) {
-    destinationControl.setCustomValidity(`Sorry, there is no information about ${destinationControl.value}`);
+    destinationElement.setCustomValidity(`Sorry, there is no information about ${destinationElement.value}`);
   }
   else {
-    destinationControl.setCustomValidity('');
+    destinationElement.setCustomValidity('');
   }
 
-  destinationControl.reportValidity();
+  destinationElement.reportValidity();
 };
 
 const validateBasePrice = (evt) => {
-  const baePriceControl = evt.target.querySelector('.event__input--price');
+  const baePriceElement = evt.target.querySelector('.event__input--price');
 
-  if (!baePriceControl.value) {
-    baePriceControl.setCustomValidity('Please specify the base price of the trip');
+  if (!baePriceElement.value) {
+    baePriceElement.setCustomValidity('Please specify the base price of the trip');
   } else {
-    baePriceControl.setCustomValidity('');
+    baePriceElement.setCustomValidity('');
   }
 
-  baePriceControl.reportValidity();
+  baePriceElement.reportValidity();
 };
 
 const validateDates = (evt) => {

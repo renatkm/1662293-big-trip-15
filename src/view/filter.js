@@ -29,7 +29,7 @@ const createFilterTemplate = (filterItems, currentFilterType) => {
     </form>`;
 };
 
-class Filter extends AbstractView {
+export default class Filter extends AbstractView {
   constructor(filters, currentFilterType) {
     super();
     this._currentFilterType = currentFilterType;
@@ -42,6 +42,11 @@ class Filter extends AbstractView {
     return createFilterTemplate(this._filters, this._currentFilterType);
   }
 
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener('click', this._filterTypeChangeHandler);
+  }
+
   _filterTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'INPUT') {
       return;
@@ -50,11 +55,5 @@ class Filter extends AbstractView {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
   }
-
-  setFilterTypeChangeHandler(callback) {
-    this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener('click', this._filterTypeChangeHandler);
-  }
 }
 
-export default Filter;

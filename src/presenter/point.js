@@ -14,7 +14,7 @@ const ViewState = {
   ABORTING: 'ABORTING',
 };
 
-class Point {
+export default class Point {
   constructor(pointListContainer, handlePointUpdate, handleModeChange) {
     this._pointListContainer = pointListContainer;
     this._handlePointUpdate = handlePointUpdate;
@@ -128,14 +128,6 @@ class Point {
     this._mode = Mode.DEFAULT;
   }
 
-  _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this._pointEditComponent.reset(this._point);
-      this._replaceEditToView();
-    }
-  }
-
   _handleEditClick() {
     this._replaceViewToEdit();
   }
@@ -174,7 +166,14 @@ class Point {
       ),
     );
   }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._pointEditComponent.reset(this._point);
+      this._replaceEditToView();
+    }
+  }
 }
 
 export {ViewState};
-export default Point;

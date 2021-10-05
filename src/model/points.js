@@ -1,6 +1,6 @@
 import AbstractObserver from './abstract-observer.js';
 
-class Points extends AbstractObserver {
+export default class Points extends AbstractObserver {
   constructor() {
     super();
     this._points = [];
@@ -98,5 +98,3 @@ class Points extends AbstractObserver {
     return adaptedPoint;
   }
 }
-
-export default Points;

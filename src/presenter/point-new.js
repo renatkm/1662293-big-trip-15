@@ -2,7 +2,7 @@ import PointEditView from '../view/point-edit.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
-class PointNew {
+export default class PointNew {
   constructor(pointListContainer, handlePointUpdate) {
     this._pointListContainer = pointListContainer;
     this._handlePointUpdate = handlePointUpdate;
@@ -65,13 +65,6 @@ class PointNew {
     this._pointEditComponent.shake(resetFormState);
   }
 
-  _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.delete();
-    }
-  }
-
   _handleDeleteClick() {
     this.delete();
   }
@@ -83,6 +76,11 @@ class PointNew {
       point,
     );
   }
-}
 
-export default PointNew;
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.delete();
+    }
+  }
+}

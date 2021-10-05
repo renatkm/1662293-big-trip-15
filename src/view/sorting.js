@@ -16,7 +16,7 @@ const createSortingTemplate = (currentSortType) => {
   </form>`;
 };
 
-class Sorting extends AbstractView {
+export default class Sorting extends AbstractView {
   constructor(sortType) {
     super();
     this._sortType = sortType;
@@ -27,6 +27,11 @@ class Sorting extends AbstractView {
     return createSortingTemplate(this._sortType);
   }
 
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
+  }
+
   _sortTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'INPUT') {
       return;
@@ -35,11 +40,4 @@ class Sorting extends AbstractView {
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
-
-  setSortTypeChangeHandler(callback) {
-    this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
-  }
 }
-
-export default Sorting;

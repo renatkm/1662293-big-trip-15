@@ -62,8 +62,7 @@ const createPointTemplate = (point) =>  {
 </li>`;
 };
 
-
-class Point extends AbstractView {
+export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
@@ -75,16 +74,6 @@ class Point extends AbstractView {
     return createPointTemplate(this._point);
   }
 
-  _pointClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.pointClick();
-  }
-
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
   setPointClickHandler(callback) {
     this._callback.pointClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
@@ -94,6 +83,14 @@ class Point extends AbstractView {
     this._callback.favoriteClick = callback;
     this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
-}
 
-export default Point;
+  _pointClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.pointClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+}
